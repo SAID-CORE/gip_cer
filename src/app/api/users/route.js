@@ -6,6 +6,7 @@ async function poster(request) {
   const client = new Client(process.env.DATABASE_URL);
   // extract body from request
   const body = await request.json();
+  // TODO: check email? and num_tel
   // console.log(body)
   const values = [body.email, body.num_tel, body.name, body.surname]
 
