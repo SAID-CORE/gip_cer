@@ -3,31 +3,67 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    width: 100vw;
+    min-height: 100vh;
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+            to bottom,
+            transparent,
+            rgb(var(--background-end-rgb))
+    ) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+.bg-primary {
+    background-color: #36443E;
+}
+
+.text-primary {
+    color: #36443E;
+}
+
+.bg-secondary {
+    background-color: #FAFF00;
+}
+
+#simulator img {
+    min-width: 50vw;
+}
+
+.bg-green-custom {
+    background-color: #4F9E50FF
+}
+
+table td, table th, table tfoot {
+    border: 1px solid black;
+    padding: 1em;
+}
+
+#navLogo {
+    width: 100%;
+    max-width: 180px;
+}
+
+.MuiToolbar-root button {
+    color: black !important;
+    font-size: 0.6em;
 }
