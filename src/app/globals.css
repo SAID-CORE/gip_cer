@@ -80,5 +80,9 @@ table td, table th, table tfoot {
 
 .MuiToolbar-root button {
     color: black !important;
-    font-size: 0.6em;
+    font-size: 0.7em;
+}
+
+footer img {
+    max-width: 25%;
 }
