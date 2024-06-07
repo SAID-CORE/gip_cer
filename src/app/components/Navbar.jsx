@@ -7,27 +7,24 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import {useState} from "react";
 
 
 export default function Navbar() {
     const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
     const pages = [{
         title: 'Home',
         href: "https://deltakilowatt.it/"
-    }, {
-        title: 'I nostri servizi',
-        href: "https://deltakilowatt.it/superbonus/"
     },
         {
+            title: 'I nostri servizi',
+            href: "https://deltakilowatt.it/superbonus/"
+        },
+        {
             title: 'CER',
-            href: "https://cer.deltakilowatt.it/?_gl=1%2Aowimto%2A_ga%2ANjM1MTg2OTQxLjE3MTc2Njc5ODg.%2A_ga_GKGP1XTS96%2AMTcxNzY3NTk0My4yLjEuMTcxNzY3NjA1Mi41OC4wLjA.&_ga=2.167934945.1751877275.1717667988-635186941.1717667988"
+            href: "https://cer.deltakilowatt.it/"
         },
         {
             title: 'Superbonus',
@@ -46,20 +43,11 @@ export default function Navbar() {
             title: 'Contattaci',
             href: "https://deltakilowatt.it/contattaci/"
         }];
-    // const pages = ['Home', 'I nostri servizi', 'Superbonus', 'CER', 'Studio di fattibilità', 'Blog', 'Contattaci'];
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
     };
 
     return (
@@ -120,32 +108,6 @@ export default function Navbar() {
                                 </a>
 
                             ))}
-                        </Box>
-
-                        <Box sx={{flexGrow: 0}}>
-                            <Menu
-                                sx={{mt: '45px'}}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {/*ICONE SOCIAL */}
-                                {/*{settings.map((setting) => (*/}
-                                {/*    <MenuItem key={setting} onClick={handleCloseUserMenu}>*/}
-                                {/*        <Typography textAlign="center">{setting}</Typography>*/}
-                                {/*    </MenuItem>*/}
-                                {/*))}*/}
-                            </Menu>
                         </Box>
                     </div>
                 </Toolbar>

@@ -17,8 +17,7 @@
 }
 
 body {
-    width: 100vw;
-    min-height: 100vh;
+    max-width: 100vw !important;
     color: rgb(var(--foreground-rgb));
     background: linear-gradient(
             to bottom,
@@ -33,16 +32,32 @@ body {
     }
 }
 
+/* CUSTOM CSS */
+:root {
+    --primary: #36443E;
+    --secondary: #FAFF00;
+    --tertiary: #4F9E50FF;
+}
+
 .bg-primary {
-    background-color: #36443E;
+    background-color: var(--primary);
 }
 
 .text-primary {
-    color: #36443E;
+    color: var(--primary);
+}
+
+.text-tertiary {
+    color: var(--tertiary);
+
 }
 
 .bg-secondary {
-    background-color: #FAFF00;
+    background-color: var(--secondary);
+}
+
+#simulator {
+    margin-top: -3em;
 }
 
 #simulator img {
@@ -50,7 +65,7 @@ body {
 }
 
 .bg-green-custom {
-    background-color: #4F9E50FF
+    background-color: var(--tertiary);
 }
 
 table td, table th, table tfoot {
