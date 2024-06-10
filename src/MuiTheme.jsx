@@ -11,5 +11,8 @@ export const theme = createTheme({
         tertiary: {
             main: "#4F9E50FF",
         },
+        gray: {
+            main: "#808080",
+        }
     },
 });

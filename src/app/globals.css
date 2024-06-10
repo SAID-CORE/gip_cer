@@ -86,3 +86,54 @@ table td, table th, table tfoot {
 footer img {
     max-width: 25%;
 }
+
+/* navbar */
+.socialIcons {
+    color: gray;
+    border-left: 1px solid lightgray;
+}
+
+.socialIcons a {
+    padding: 10px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.facebookIcon:hover {
+    color: white;
+    background-color: #37589b;
+}
+
+.whatsappIcon:hover {
+    color: white;
+    background-color: #00e676;
+}
+
+.mailIcon:hover {
+    color: white;
+    background-color: #9fae37;
+}
+
+.linkedinIcon:hover {
+    color: white;
+    background-color: #419cca;
+}
+
+.instagramIcon:hover {
+    color: white;
+    background-color: #a67658;
+}
+
+.searchBtn:hover {
+    background-color: transparent !important;
+}
+
+header button, #menu-appbar button, .MuiToolbar-root button {
+    text-transform: inherit !important;
+    color: #808080 !important;
+    font-weight: 500;
+}
+
+header button {
+    font-size: 0.8em !important;
+}
