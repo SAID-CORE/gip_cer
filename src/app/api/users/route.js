@@ -1,31 +1,40 @@
 import {Client} from "pg";
-
+import {validateFirstFormData} from "./utils.js"
 
 async function poster(request) {
-  // console.log(process.env.DATABASE_URL)
-  const client = new Client(process.env.DATABASE_URL);
-  // extract body from request
-  const body = await request.json();
-  // TODO: check email? and num_tel
-  // console.log(body)
-  const values = [body.email, body.num_tel, body.name, body.surname]
+    // console.log("request: ", request);
 
-  await client.connect();
-  var results = {}
-  try {
-    // results = await client.query("SELECT NOW()");
-    const sql = 'INSERT INTO users(email, num_tel, name, surname) VALUES($1, $2, $3, $4) RETURNING id'
-    results = await client.query(sql, values)
-    console.log(results);
-  } catch (err) {
-    results = {}
-    console.error("error executing query:", err);
-  } finally {
-    client.end();
-  }
-  return new Response(JSON.stringify(results.rows));
+    // extract body from request
+    const body = await request.json();
 
+    // data validation
+    let response = await validateFirstFormData(body);
+
+    if (!response.success) {
+        return new Response(JSON.stringify(response));
+    } else {
+        // data have been validated
+
+        // client connection
+        const client = new Client(process.env.DATABASE_URL);
+        await client.connect();
+
+        // values to insert into db
+        const values = [body.email, body.num_tel, body.name, body.surname]
+
+        // query execution
+        try {
+            const sql = 'INSERT INTO users(email, num_tel, name, surname) VALUES($1, $2, $3, $4)  ON CONFLICT (num_tel) DO NOTHING RETURNING id'
+            // const sql = 'INSERT INTO users(email, num_tel, name, surname) VALUES($1, $2, $3, $4) RETURNING id'
+            let results = await client.query(sql, values)
+            console.log(results);
+            return new Response(JSON.stringify(results.rows));
+        } catch (err) {
+            console.error("error executing query:", err);
+        } finally {
+            client.end();
+        }
+    }
 }
-
 
 export {poster as POST}
