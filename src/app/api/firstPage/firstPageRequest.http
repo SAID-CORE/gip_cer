@@ -1,0 +1,9 @@
+POST http://localhost:3000/api/firstPage
+Accept: application/json
+
+{
+"email": "prova@gmail.com",
+"num_tel": "+393472656222",
+"name":"AAA",
+"surname":"BBB"
+}

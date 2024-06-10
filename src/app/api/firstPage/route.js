@@ -2,8 +2,6 @@ import {Client} from "pg";
 import {validateFirstFormData} from "./utils.js"
 
 async function poster(request) {
-    // console.log("request: ", request);
-
     // extract body from request
     const body = await request.json();
 
@@ -24,8 +22,7 @@ async function poster(request) {
 
         // query execution
         try {
-            const sql = 'INSERT INTO users(email, num_tel, name, surname) VALUES($1, $2, $3, $4)  ON CONFLICT (num_tel) DO NOTHING RETURNING id'
-            // const sql = 'INSERT INTO users(email, num_tel, name, surname) VALUES($1, $2, $3, $4) RETURNING id'
+            const sql = "INSERT INTO users(email, num_tel, name, surname) VALUES($1, $2, $3, $4)  ON CONFLICT (num_tel) DO UPDATE SET num_tel=$2 RETURNING id"
             let results = await client.query(sql, values)
             console.log(results);
             return new Response(JSON.stringify(results.rows));

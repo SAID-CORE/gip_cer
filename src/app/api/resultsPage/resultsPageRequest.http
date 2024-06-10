@@ -1,0 +1,6 @@
+GET http://localhost:3000/api/resultsPage
+Accept: application/json
+
+{
+"id":"48ab03bb-6050-41a6-a170-377ae1b6849a"
+}
