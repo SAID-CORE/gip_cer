@@ -137,3 +137,41 @@ header button, #menu-appbar button, .MuiToolbar-root button {
 header button {
     font-size: 0.8em !important;
 }
+
+
+#mapContainer .mdTable {
+    position: absolute;
+    top: 30%
+}
+
+#mapContainer img {
+    min-width: 300px;
+}
+
+#carousel {
+    max-width: 100%;
+    min-height: 100%;
+}
+
+.carousel-root {
+    height: 100%;
+    object-fit: contain;
+}
+
+.slider-wrapper {
+    height: 100% !important;
+}
+
+.slide, .slide > div {
+    min-height: 100% !important;
+}
+
+.slide {
+    margin-bottom: 30px;
+}
+
+.carousel.carousel-slider .control-arrow:hover {
+    background-color: transparent;
+
+}
+

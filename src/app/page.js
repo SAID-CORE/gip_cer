@@ -17,7 +17,15 @@ export default function Home() {
     })
 
     const [selectedMunicipality, setSelectedMunicipality] = useState(null)
+    const [isLoadingData, setIsLoadingData] = useState(false)
 
+    const handleLoadMunicipalityData = (newValue) => {
+        setSelectedMunicipality(newValue)
+        setIsLoadingData(true)
+        setTimeout(() => {
+            setIsLoadingData(false)
+        }, 5000)
+    }
 
     function handleClick() {
         alert("Coddati")
@@ -35,7 +43,7 @@ export default function Home() {
                     </p>
                     <Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>
                 </div>
-                <div className={"flex"} id={"simulator"}>
+                <div className={"md:flex"} id={"simulator"}>
                     <div className={"p-12 flex flex-col justify-start gap-8"}>
                         <h5 className={"text-primary text-3xl font-semibold"}>IL SIMULATORE DELTA KILOWATT</h5>
                         <p>
@@ -61,9 +69,10 @@ export default function Home() {
                 </div>
                 <div className={"bg-green-custom flex flex-col justify-between items-center text-white p-12 gap-2"}>
                     <h5 className={"text-3xl font-semibold"}> IL RISULTATO DELLA SIMULAZIONE</h5>
-                    <p>A seconda del volume di persone che aderiranno alla Comunità di Energia Rinnovabile</p>
+                    <p className={"text-center"}>A seconda del volume di persone che aderiranno alla Comunità di Energia
+                        Rinnovabile</p>
                     <ProcessTimeline></ProcessTimeline>
-                    <Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>
+                    {/*<Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>*/}
 
                 </div>
                 <div className={"p-12 flex flex-col items-center"}>
@@ -76,7 +85,7 @@ export default function Home() {
                                       sx={{width: 300}}
                                       noOptionsText={'Nessun risultato'}
                                       value={selectedMunicipality}
-                                      onChange={(event, newValue) => setSelectedMunicipality(newValue)}
+                                      onChange={(event, newValue) => handleLoadMunicipalityData(newValue)}
                                       isOptionEqualToValue={(option, value) => option.value === value.value}
                                       renderInput={(params) => {
                                           return <TextField {...params} label="Seleziona il tuo comune"/>
@@ -85,45 +94,84 @@ export default function Home() {
 
                         </Autocomplete>
                     </div>
+                    <div className={"relative my-14"} id={"mapContainer"}>
+                        <img src={"/assets/Img_LandingPage_2.png"} alt={"Mappa della Sardegna"}
+                             className={"w-1/4 relative mx-auto"}/>
+                        {/* INIZIO TABELLA */}
+                        {
+                            !isLoadingData && selectedMunicipality &&
+                            <>
+                                {/* Mobile */}
+                                <table className={"bg-white md:hidden mx-auto mt-3"}>
+                                    <thead>
+                                    <tr>
+                                        <th colSpan={2}
+                                            className={"bg-primary text-white"}>{selectedMunicipality.value} (Prov)
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>N° totale aderenti</td>
+                                        <td>151</td>
+                                    </tr>
+                                    <tr>
+                                        <td>N° totale Consumatori</td>
+                                        <td>82</td>
+                                    </tr>
+                                    <tr>
+                                        <td>N° totale Produttori</td>
+                                        <td>58</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colSpan={2}
+                                            className={"bg-secondary text-primary text-sm font-light cursor-pointer"}
+                                            onClick={handleClick}>Avvia la simulazione, unisciti alla CER del tuo comune
+                                        </th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
 
-                    <img src={"/assets/Img_LandingPage_2.png"} alt={"Mappa della Sardegna"} className={"w-1/4 my-24"}/>
+                                {/*Desktop*/}
+                                <table className={"bg-white hidden md:block mdTable"}>
+                                    <thead>
+                                    <tr>
+                                        <th colSpan={2}
+                                            className={"bg-primary text-white"}>{selectedMunicipality.value} (Prov)
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>N° totale aderenti</td>
+                                        <td>151</td>
+                                    </tr>
+                                    <tr>
+                                        <td>N° totale Consumatori</td>
+                                        <td>82</td>
+                                    </tr>
+                                    <tr>
+                                        <td>N° totale Produttori</td>
+                                        <td>58</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colSpan={2}
+                                            className={"bg-secondary text-primary text-sm font-light cursor-pointer"}
+                                            onClick={handleClick}>Avvia la simulazione, unisciti alla CER del tuo comune
+                                        </th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </>
+                        }
+                        {/* FINE TABELLA*/}
+                    </div>
 
-                    {/* INIZIO TABELLA */}
-                    {
-                        selectedMunicipality !== null &&
-                        <table>
-                            <thead>
-                            <tr>
-                                <th colSpan={2}
-                                    className={"bg-primary text-white"}>{selectedMunicipality.value} (Prov)
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>N° totale aderenti</td>
-                                <td>151</td>
-                            </tr>
-                            <tr>
-                                <td>N° totale Consumatori</td>
-                                <td>82</td>
-                            </tr>
-                            <tr>
-                                <td>N° totale Produttori</td>
-                                <td>58</td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th colSpan={2}
-                                    className={"bg-secondary text-primary text-sm font-light cursor-pointer"}
-                                    onClick={handleClick}>Avvia la simulazione, unisciti alla CER del tuo comune
-                                </th>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    }
-                    {/* FINE TABELLA*/}
+
                 </div>
             </main>
         </ThemeProvider>

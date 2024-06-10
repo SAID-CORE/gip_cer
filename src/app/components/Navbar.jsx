@@ -15,7 +15,6 @@ import {MdEmail} from "react-icons/md";
 import {TextField, Tooltip} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import {theme} from "@/MuiTheme";
-import {redirect} from "next/navigation";
 
 
 export default function Navbar() {
