@@ -1,39 +1,53 @@
-import {isValidPhoneNumber} from "libphonenumber-js";
+import {parsePhoneNumber, isValidPhoneNumber} from "libphonenumber-js";
+import {v5} from 'uuid';
 import {fileURLToPath} from "url";
 
-async function validateFirstFormData(data){
+async function validateFirstFormData(data) {
     // checking for missing mandatory fields
     let missingList = []
-    if (!data.hasOwnProperty("name")){
+    if (!data.hasOwnProperty("name")) {
         missingList.push("name")
     }
-    if(!data.hasOwnProperty("surname")){
+    if (!data.hasOwnProperty("surname")) {
         missingList.push("surname")
     }
-    if(!data.hasOwnProperty("num_tel")){
+    if (!data.hasOwnProperty("num_tel")) {
         missingList.push("num_tel")
     }
 
     if (missingList.length > 0) {
         return {"success": false, "message": "missing parameters " + missingList.toString()}
-    }else{
+    } else {
         // phone number validation
-        const region = "IT"
-        const phoneNumber = data.num_tel
+        try {
+            const phoneNumber = await parsePhoneNumber(data.num_tel, "IT")
 
-        if (!isValidPhoneNumber(phoneNumber, region)){
-            return {"success": false, "message": "invalid phone number " + phoneNumber}
-        }else{
-            return {"success": true, "message": "data validated correctly"}
+            if (!phoneNumber.isValid()) {
+                return {"success": false, "message": "invalid phone number " + phoneNumber}
+            } else {
+                return {"success": true, "message": "data validated correctly"}
+            }
+
+        } catch (e) {
+            return {"success": false, "message": "error parsing phone number " + e}
         }
-
     }
 }
 
-export {validateFirstFormData}
+async function genUuid5(name, namespace) {
+    return v5(name, namespace);
+}
 
-// if (process.argv[1] === fileURLToPath(import.meta.url)){
-//     let data ={"Nome": "Giacomo", "Cognome": "Pistis", "Telefono": "3479731426"};
-//     let response = await validateFirstFormData(data)
-//     console.log(response)
-// }
+export {validateFirstFormData, genUuid5}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    //
+    // const data = {
+    //     "name": "pippo",
+    //     "surname": "pluto",
+    //     "num_tel": "+393479731426"
+    // }
+    // let response = await validateFirstFormData(data)
+
+
+}

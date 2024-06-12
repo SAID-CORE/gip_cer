@@ -2,8 +2,11 @@ POST http://localhost:3000/api/firstPage
 Accept: application/json
 
 {
+"num_tel": "3472656222",
+"name":"Giacomo",
+"surname":"Pistis",
 "email": "prova@gmail.com",
-"num_tel": "+393472656222",
-"name":"AAA",
-"surname":"BBB"
+"address": "via roma 2",
+"city": "Cagliari",
+"geo_data": {"prova1": 1, "prova2": 2}
 }
