@@ -18,7 +18,10 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
-    "react-responsive-carousel": "^3.2.23"
+    "react-native-switch-selector": "^2.3.0",
+    "react-native-switch-selector-fix": "^2.0.4",
+    "react-responsive-carousel": "^3.2.23",
+    "react-switch-selector": "^2.2.1"
   },
   "devDependencies": {
     "eslint": "^8",

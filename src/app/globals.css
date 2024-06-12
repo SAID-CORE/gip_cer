@@ -172,6 +172,23 @@ header button {
 
 .carousel.carousel-slider .control-arrow:hover {
     background-color: transparent;
-
 }
 
+#breadcrumb svg, #breadcrumb mask {
+    scale: 0.5;
+    aspect-ratio: 1/1;
+}
+
+header a {
+    margin: auto;
+}
+
+.switchWrapper {
+    width: 200px;
+    height: 37px;
+    min-width: 200px;
+
+    label {
+        font-weight: bolder;
+    }
+}

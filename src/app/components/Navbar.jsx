@@ -294,7 +294,7 @@ export default function Navbar() {
                                         <FaWhatsapp/>
                                     </a>
                                     <a className={"mailIcon"} href={"mailto:info@deltakilowatt.it"}
-                                        // target={"_blank"}
+                                       target={"_blank"}
                                     >
                                         <MdEmail/>
                                     </a>
