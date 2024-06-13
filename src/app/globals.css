@@ -192,3 +192,77 @@ header a {
         font-weight: bolder;
     }
 }
+
+#loader img {
+    animation: loaderAnimation 2s linear infinite;
+    animation-timing-function: ease-in-out;
+}
+
+/* Bulb loader animation */
+/* Inizializzazione */
+#licht {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    animation: scale-animation 1s infinite alternate;
+}
+
+#glow {
+    opacity: 1;
+    transform-origin: 50% 50%;
+    animation: glow-animation 1s infinite alternate;
+}
+
+.bulb-animation #bulb_body {
+    animation: bulb-body-animation 5s infinite alternate;
+}
+
+/* Definizione dell'animazione */
+@keyframes scale-animation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes glow-animation {
+    0% {
+        stroke: var(--primary);
+    }
+    50% {
+        stroke: var(--primary);
+    }
+    100% {
+        stroke: var(--primary);
+    }
+}
+
+@keyframes bulb-body-animation {
+    0% {
+        fill: var(--secondary);
+        fill-opacity: 0.6;
+    }
+    /*10% {*/
+    /*    fill: var(--secondary);*/
+    /*    fill-opacity: 0.5;*/
+    /*}*/
+    50% {
+        fill: var(--secondary);
+        fill-opacity: 1;
+    }
+    /*90% {*/
+    /*    fill: var(--secondary);*/
+    /*    fill-opacity: 0.5;*/
+    /*}*/
+    100% {
+        fill: var(--secondary);
+        fill-opacity: 0.6;
+    }
+}
+
+
