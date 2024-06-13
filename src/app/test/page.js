@@ -1,16 +1,13 @@
 'use client'
 import {theme} from "@/MuiTheme";
-import {Autocomplete, Grid, TextField, ThemeProvider, Tooltip} from "@mui/material";
+import {ThemeProvider} from "@mui/material";
 import FirstIcon from "@/app/components/icons/FirstIcon";
 import SecondIcon from "@/app/components/icons/SecondIcon";
 import ThirdIcon from "@/app/components/icons/ThirdIcon";
-import Info from "@/app/components/icons/Info";
 import {useState} from "react";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import SwitchSelector from "react-switch-selector";
-import LoaderDKW from "@/app/components/LoaderDKW";
 import LeadForm from "@/app/components/LeadForm";
+import DataForm from "@/app/components/icons/DataForm";
 
 
 export default function Home() {
@@ -29,7 +26,8 @@ export default function Home() {
                     <hr className={"flex-grow"} style={{borderColor: step === 2 ? "var(--tertiary)" : "white"}}/>
                     <ThirdIcon color={step === 2 ? "var(--tertiary)" : "white"}/>
                 </div>
-                {step === 0 && <LeadForm></LeadForm>}
+                {step === 0 && <LeadForm setStep={setStep}></LeadForm>}
+                {step === 1 && <DataForm setStep={setStep}></DataForm>}
 
                 <Button onClick={() => {
                     if (step !== 2) {

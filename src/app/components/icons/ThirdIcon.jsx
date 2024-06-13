@@ -20,7 +20,7 @@ export default function ThirdIcon({color}) {
                 d="M81.7807 73.0182C80.9503 74.1299 80.0685 75.201 79.1353 76.2275C78.2021 77.2554 77.2202 78.2359 76.1924 79.1677C75.1645 80.1009 74.0934 80.9827 72.9803 81.8118C71.8673 82.6408 70.7163 83.4157 69.5289 84.1339C68.3401 84.8534 67.1202 85.5134 65.8692 86.1139C64.6168 86.7144 63.3401 87.254 62.035 87.7327C60.7313 88.2101 59.4086 88.624 58.0643 88.9743C56.7199 89.3246 55.3621 89.6099 53.9907 89.829L54.5669 93.3995C56.0532 93.1614 57.5233 92.8531 58.9799 92.4744C60.4351 92.0944 61.87 91.6453 63.282 91.1287C64.6953 90.6107 66.0802 90.0265 67.4367 89.3746C68.7918 88.7241 70.1145 88.0086 71.4007 87.2296C72.6882 86.4506 73.9352 85.6121 75.1415 84.7141C76.3479 83.8147 77.507 82.8599 78.6214 81.8496C79.7358 80.838 80.7974 79.7763 81.8091 78.6633C82.8207 77.5502 83.7755 76.3912 84.6749 75.1862L81.7807 73.0182Z"
                 style={{fill: color || "#FFFFFF"}}/>
             <path d="M0 45.1931H3.61913V48.8082H0V45.1931Z" style={{fill: color || "#FFFFFF"}}/>
-            <mask id="mask0_105_82" style={{"mask-type": "luminance"}} maskUnits="userSpaceOnUse" x="45"
+            <mask id="mask0_105_82" style={{maskType: "luminance"}} maskUnits="userSpaceOnUse" x="45"
                   y="0"
                   width="5" height="4">
                 <path d="M45.0088 0H49.1635V3.76384H45.0088V0Z" style={{fill: color || "#FFFFFF"}}/>
@@ -29,7 +29,7 @@ export default function ThirdIcon({color}) {
                 <path d="M45.2319 0.00134277H48.8511V3.61642H45.2319V0.00134277Z"
                       style={{fill: color || "#FFFFFF"}}/>
             </g>
-            <mask id="mask1_105_82" style={{"mask-type": "luminance"}} maskUnits="userSpaceOnUse" x="45"
+            <mask id="mask1_105_82" style={{maskType: "luminance"}} maskUnits="userSpaceOnUse" x="45"
                   y="90"
                   width="5" height="4">
                 <path d="M45.0088 90.3199H49.1635V93.9999H45.0088V90.3199Z" style={{fill: color || "#FFFFFF"}}/>

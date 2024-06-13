@@ -2,7 +2,7 @@ export default function Info({color}) {
     return (
         <svg style={{width: "18px", height: "18px", fill: color || "none"}} viewBox="0 0 18 18"
              xmlns="http://www.w3.org/2000/svg">
-            <mask id="mask0_13_840" style={{"mask-type": "luminance"}} maskUnits="userSpaceOnUse"
+            <mask id="mask0_13_840" style={{maskType: "luminance"}} maskUnits="userSpaceOnUse"
                   x="0" y="0" width="18" height="18">
                 <path d="M0 0H18V18H0V0Z" style={{fill: color || "#406441"}}/>
             </mask>
