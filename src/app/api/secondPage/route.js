@@ -1,4 +1,5 @@
 import {Client} from "pg";
+import {v4} from 'uuid';
 import {checkUserExistence, validateSecondFormData} from "./utils.js"
 
 async function poster(request) {
@@ -15,12 +16,20 @@ async function poster(request) {
         const client = new Client(process.env.DATABASE_URL);
         await client.connect();
 
+        // if user has bills generate the keys and the presigned urls to insert bills into s3
+        let keys = []
+        if (body.metadata.has_bills) {
+            for (let i = 0; i < body.metadata.bills_number; i++) {
+                keys.push(v4())
+            }
+        }
+
         //values to update the user into db
-        const values = [body.id, body.avg_monthly_bill, body.user_type, body.property_type, body.community_type, body.has_pv_type, body.terms]
+        const values = [body.id, body.avg_monthly_bill, body.user_type, body.property_type, body.community_type, body.has_pv_type, keys]
 
         // query execution
         try {
-            const sql = "UPDATE users SET avg_monthly_bill=$2, user_type=$3, property_type=$4, community_type=$5, has_pv_type=$6, terms=$7 WHERE id=$1"
+            const sql = "UPDATE users SET avg_monthly_bill=$2, user_type=$3, property_type=$4, community_type=$5, has_pv_type=$6, bill_keys=bill_keys || $7 WHERE id=$1"
             let results = await client.query(sql, values)
             console.log(results);
             if (results.rowCount === 1) {

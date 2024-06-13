@@ -8,5 +8,5 @@ Accept: application/json
 "property_type": 1,
 "community_type": 2,
 "has_pv_type": 3,
-"terms": true
+"metadata": {"has_bills": true, "bills_number": 1}
 }

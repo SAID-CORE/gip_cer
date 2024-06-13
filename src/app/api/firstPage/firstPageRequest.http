@@ -8,5 +8,6 @@ Accept: application/json
 "email": "prova@gmail.com",
 "address": "via roma 2",
 "city": "Cagliari",
-"geo_data": {"prova1": 1, "prova2": 2}
+"geo_data": {"prova1": 1, "prova2": 2},
+"terms": true
 }

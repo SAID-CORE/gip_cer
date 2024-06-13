@@ -34,4 +34,8 @@ async function validateSecondFormData(data) {
     }
 }
 
+async function generatePresignedUrl(){
+
+}
+
 export {checkUserExistence, validateSecondFormData}

@@ -18,11 +18,11 @@ async function poster(request) {
         await client.connect();
 
         // values to insert into db
-        const values = [await genUuid5(body.num_tel, process.env.SALT), body.name, body.surname, body.num_tel, body.email, body.address, body.city, body.geo_data]
+        const values = [await genUuid5(body.num_tel, process.env.SALT), body.name, body.surname, body.num_tel, body.email, body.address, body.city, body.geo_data, body.terms]
 
         // query execution
         try {
-            const sql = "INSERT INTO users(id, name, surname, num_tel, email, address, city, geo_data) VALUES($1, $2, $3, $4, $5, $6, $7, $8)  ON CONFLICT (num_tel) DO UPDATE SET num_tel=$4 RETURNING id"
+            const sql = "INSERT INTO users(id, name, surname, num_tel, email, address, city, geo_data, terms) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)  ON CONFLICT (num_tel) DO UPDATE SET num_tel=$4 RETURNING id"
             let results = await client.query(sql, values)
             console.log(results);
             if (results.rowCount === 1) {
