@@ -2,5 +2,11 @@ POST http://localhost:3000/api/secondPage
 Accept: application/json
 
 {
-"id":"1240b81b-4bb2-5fc5-930b-bf047d87d9b9"
+"id":"1240b81b-4bb2-5fc5-930b-bf047d87d9b9",
+"avg_monthly_bill": 1250.28,
+"user_type": 1,
+"property_type": 1,
+"community_type": 2,
+"has_pv_type": 3,
+"terms": true
 }

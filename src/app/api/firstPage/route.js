@@ -25,9 +25,14 @@ async function poster(request) {
             const sql = "INSERT INTO users(id, name, surname, num_tel, email, address, city, geo_data) VALUES($1, $2, $3, $4, $5, $6, $7, $8)  ON CONFLICT (num_tel) DO UPDATE SET num_tel=$4 RETURNING id"
             let results = await client.query(sql, values)
             console.log(results);
-            return new Response(JSON.stringify(results.rows));
+            if (results.rowCount === 1) {
+                return new Response(JSON.stringify({"success": true, "message": "data inserted correctly", "id": results.rows[0].id}));
+            } else {
+                return new Response(JSON.stringify({"success": false, "message": "data not inserted"}));
+            }
         } catch (err) {
             console.error("error executing query:", err);
+            return new Response(JSON.stringify({"success": false, "message": "error executing query"}));
         } finally {
             client.end();
         }

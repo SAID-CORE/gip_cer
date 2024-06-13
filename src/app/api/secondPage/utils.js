@@ -17,4 +17,21 @@ async function checkUserExistence(id) {
     }
 }
 
-export {checkUserExistence}
+async function validateSecondFormData(data) {
+    // checking for missing mandatory fields
+    let missingList = []
+    if (!data.hasOwnProperty("user_type")){
+        missingList.push("user_type")
+    }
+    if (!data.hasOwnProperty("property_type")){
+        missingList.push("property_type")
+    }
+
+    if (missingList.length > 0) {
+        return {"success": false, "message": "missing parameters " + missingList.toString()}
+    } else {
+        return {"success": true, "message": "data validated correctly"}
+    }
+}
+
+export {checkUserExistence, validateSecondFormData}
