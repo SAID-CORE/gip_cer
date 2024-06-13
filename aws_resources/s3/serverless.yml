@@ -10,6 +10,8 @@ provider:
   name: aws
   region: eu-central-1
   profile: SAID
+  environment:
+    BUCKET_NAME: ${self:custom.gipcerName}
 
 resources:
   Resources:
