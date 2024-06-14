@@ -6,9 +6,12 @@ import {theme} from "@/MuiTheme";
 import {Autocomplete, TextField, ThemeProvider} from "@mui/material";
 import ProcessTimeline from "@/app/components/ProcessTimeline";
 import {comuniCagliari} from "@/app/utils/MunicipalityList";
+import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
+
 
 export default function Home() {
-
+    const router = useRouter()
     const municipalities = comuniCagliari.map((m) => {
         return ({
             label: m,
@@ -28,7 +31,9 @@ export default function Home() {
     }
 
     function handleClick() {
-        alert("Coddati")
+        if (confirm("Coddati")) {
+            router.push("/test")
+        }
     }
 
     return (
@@ -67,7 +72,7 @@ export default function Home() {
 
 
                 </div>
-                <div className={"bg-green-custom flex flex-col justify-between items-center text-white p-12 gap-2"}>
+                <div className={"bg-tertiary flex flex-col justify-between items-center text-white p-12 gap-2"}>
                     <h5 className={"text-3xl font-semibold"}> IL RISULTATO DELLA SIMULAZIONE</h5>
                     <p className={"text-center"}>A seconda del volume di persone che aderiranno alla Comunità di Energia
                         Rinnovabile</p>

@@ -7,7 +7,7 @@ import ThirdIcon from "@/app/components/icons/ThirdIcon";
 import {useState} from "react";
 import Button from "@mui/material/Button";
 import LeadForm from "@/app/components/LeadForm";
-import DataForm from "@/app/components/icons/DataForm";
+import DataForm from "@/app/components/DataForm";
 
 
 export default function Home() {
@@ -27,7 +27,7 @@ export default function Home() {
                     <ThirdIcon color={step === 2 ? "var(--tertiary)" : "white"}/>
                 </div>
                 {step === 0 && <LeadForm setStep={setStep}></LeadForm>}
-                {step === 1 && <DataForm setStep={setStep}></DataForm>}
+                {step > 0 && <DataForm setStep={setStep}></DataForm>}
 
                 <Button onClick={() => {
                     if (step !== 2) {
