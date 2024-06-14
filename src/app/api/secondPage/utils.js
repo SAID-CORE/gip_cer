@@ -1,4 +1,6 @@
 import {Client} from "pg";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
+import {S3Client, PutObjectCommand} from "@aws-sdk/client-s3";
 
 // check user id existence
 async function checkUserExistence(id) {
@@ -20,10 +22,10 @@ async function checkUserExistence(id) {
 async function validateSecondFormData(data) {
     // checking for missing mandatory fields
     let missingList = []
-    if (!data.hasOwnProperty("user_type")){
+    if (!data.hasOwnProperty("user_type")) {
         missingList.push("user_type")
     }
-    if (!data.hasOwnProperty("property_type")){
+    if (!data.hasOwnProperty("property_type")) {
         missingList.push("property_type")
     }
 
@@ -34,8 +36,18 @@ async function validateSecondFormData(data) {
     }
 }
 
-async function generatePresignedUrl(){
+async function generatePresignedUrl() {
+    const client = new S3Client({region: "eu-central-1"});
+    const putObjectParams = {
+        Bucket: "bucketprova2",
+        Key: "object-key",
+    };
 
+    const expiresIn = 1; // 1 minute
+
+    // Generate presigned URL for uploading the object
+    const putObjectCommand = new PutObjectCommand(putObjectParams);
+    return  await getSignedUrl(client, putObjectCommand, {expiresIn});
 }
 
 export {checkUserExistence, validateSecondFormData}
