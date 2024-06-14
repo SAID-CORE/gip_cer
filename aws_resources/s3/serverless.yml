@@ -1,0 +1,21 @@
+app: ${file(../serverless-global.yml):app}
+service: ${self:app}-s3
+
+frameworkVersion: "3"
+
+custom:
+  gipcerName: "gip-cer-bucket-${sls:stage}"
+
+provider:
+  name: aws
+  region: eu-central-1
+  profile: SAID
+  environment:
+    BUCKET_NAME: ${self:custom.gipcerName}
+
+resources:
+  Resources:
+    gipcerBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.gipcerName}
