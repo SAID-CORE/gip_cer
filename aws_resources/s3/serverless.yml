@@ -3,9 +3,6 @@ org: giacomop
 app: ${file(../serverless-global.yml):app}
 service: ${self:app}-s3
 
-exclude:
-    - 'node_modules/**'
-
 custom:
   gipcerName: "gip-cer-bills-bucket-${sls:stage}"
 

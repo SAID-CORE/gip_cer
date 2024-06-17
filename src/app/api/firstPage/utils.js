@@ -21,9 +21,9 @@ async function validateFirstFormData(data) {
         // phone number validation
         try {
             const phoneNumber = await parsePhoneNumber(data.num_tel, "IT")
-
+            console.log("PHONE: ", phoneNumber)
             if (!phoneNumber.isValid()) {
-                return {"success": false, "message": "invalid phone number " + phoneNumber}
+                return {"success": false, "message": `invalid phone number ${phoneNumber.number}`}
             } else {
                 return {"success": true, "message": "data validated correctly"}
             }
@@ -41,13 +41,4 @@ async function genUuid5(name, namespace) {
 export {validateFirstFormData, genUuid5}
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    //
-    // const data = {
-    //     "name": "pippo",
-    //     "surname": "pluto",
-    //     "num_tel": "+393479731426"
-    // }
-    // let response = await validateFirstFormData(data)
-
-
 }

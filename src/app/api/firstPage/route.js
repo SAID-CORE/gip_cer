@@ -1,5 +1,6 @@
 import {Client} from "pg";
 import {validateFirstFormData, genUuid5} from "./utils.js"
+import {sendStatusCode} from "next/dist/server/api-utils";
 
 async function poster(request) {
     // extract body from request
@@ -8,8 +9,9 @@ async function poster(request) {
     // data validation
     let response = await validateFirstFormData(body);
 
+
     if (!response.success) {
-        return new Response(JSON.stringify(response));
+        return new Response(JSON.stringify(response), {status: 400});
     } else {
         // data have been validated
 
@@ -26,13 +28,20 @@ async function poster(request) {
             let results = await client.query(sql, values)
             console.log(results);
             if (results.rowCount === 1) {
-                return new Response(JSON.stringify({"success": true, "message": "data inserted correctly", "id": results.rows[0].id}));
+                return new Response(JSON.stringify({
+                    "success": true,
+                    "message": "data inserted correctly",
+                    "id": results.rows[0].id
+                }));
             } else {
-                return new Response(JSON.stringify({"success": false, "message": "data not inserted"}));
+                return new Response(JSON.stringify({
+                    "success": false,
+                    "message": "data not inserted"
+                }), {status: 400});
             }
         } catch (err) {
             console.error("error executing query:", err);
-            return new Response(JSON.stringify({"success": false, "message": "error executing query"}));
+            return new Response(JSON.stringify({"success": false, "message": "error executing query"}), {status: 400});
         } finally {
             client.end();
         }
