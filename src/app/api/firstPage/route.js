@@ -28,16 +28,9 @@ async function poster(request) {
             let results = await client.query(sql, values)
             console.log(results);
             if (results.rowCount === 1) {
-                return new Response(JSON.stringify({
-                    "success": true,
-                    "message": "data inserted correctly",
-                    "id": results.rows[0].id
-                }));
+                return new Response(JSON.stringify({"success": true, "message": "data inserted correctly", "id": results.rows[0].id}));
             } else {
-                return new Response(JSON.stringify({
-                    "success": false,
-                    "message": "data not inserted"
-                }), {status: 400});
+                return new Response(JSON.stringify({"success": false, "message": "data not inserted"}), {status: 400});
             }
         } catch (err) {
             console.error("error executing query:", err);

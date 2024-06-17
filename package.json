@@ -17,6 +17,7 @@
     "pg": "^8.12.0",
     "react": "^18",
     "react-dom": "^18",
+    "serverless-plugin-include-dependencies": "^6.1.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

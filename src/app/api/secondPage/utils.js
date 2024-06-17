@@ -1,6 +1,7 @@
 import {Client} from "pg";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import {S3Client, PutObjectCommand} from "@aws-sdk/client-s3";
+import {v4} from 'uuid';
 
 // check user id existence
 async function checkUserExistence(id) {
@@ -36,18 +37,18 @@ async function validateSecondFormData(data) {
     }
 }
 
-async function generatePresignedUrl() {
+async function generatePresignedUrl(userId) {
     const client = new S3Client({region: "eu-central-1"});
     const putObjectParams = {
-        Bucket: "bucketprova2",
-        Key: "object-key",
+        Bucket: "gip-cer-bills-bucket-dev",
+        Key: userId + "/" + v4()
     };
 
-    const expiresIn = 1; // 1 minute
+    const expiresIn = 60;
 
     // Generate presigned URL for uploading the object
     const putObjectCommand = new PutObjectCommand(putObjectParams);
     return  await getSignedUrl(client, putObjectCommand, {expiresIn});
 }
 
-export {checkUserExistence, validateSecondFormData}
+export {checkUserExistence, validateSecondFormData, generatePresignedUrl}

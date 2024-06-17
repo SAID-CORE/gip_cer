@@ -35,11 +35,11 @@ async function poster(request) {
             if (results.rowCount === 1) {
                 return new Response(JSON.stringify({"success": true, "message": "data updated correctly"}));
             } else {
-                return new Response(JSON.stringify({"success": false, "message": "data not updated"}));
+                return new Response(JSON.stringify({"success": false, "message": "data not updated"}), {status: 400});
             }
         } catch (err) {
             console.error("error executing query:", err);
-            return new Response(JSON.stringify({"success": false, "message": "error executing query"}));
+            return new Response(JSON.stringify({"success": false, "message": "error executing query"}), {status: 400});
         } finally {
             client.end();
         }

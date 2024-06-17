@@ -3,6 +3,9 @@ org: giacomop
 app: ${file(../serverless-global.yml):app}
 service: ${self:app}-s3
 
+package:
+  excludeDevDependencies: false
+
 custom:
   gipcerName: "gip-cer-bills-bucket-${sls:stage}"
 
@@ -10,6 +13,7 @@ provider:
   name: aws
   region: eu-central-1
   profile: SAID
+  runtime: nodejs14.x
   environment:
     BUCKET_NAME: ${self:custom.gipcerName}
 
@@ -32,6 +36,9 @@ functions:
         Resource:
           - "arn:aws:s3:::${self:custom.gipcerName}"
           - "arn:aws:s3:::${self:custom.gipcerName}/*"
+    environment:
+      DB_URL: ${ssm:/gip-cer-db-url}
+      DB_PSW: ${ssm:/gip-cer-db-psw}
 
 
 resources:
@@ -43,3 +50,4 @@ resources:
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-plugin-include-dependencies
