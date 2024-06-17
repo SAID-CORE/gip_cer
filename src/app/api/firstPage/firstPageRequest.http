@@ -10,4 +10,4 @@ Accept: application/json
 "city": "Cagliari",
 "geo_data": {"prova1": 1, "prova2": 2},
 "terms": true
-}a
+}
