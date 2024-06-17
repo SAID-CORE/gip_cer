@@ -1,21 +1,53 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: giacomop
 app: ${file(../serverless-global.yml):app}
 service: ${self:app}-s3
 
-frameworkVersion: "3"
+package:
+  excludeDevDependencies: false
 
 custom:
-  gipcerName: "gip-cer-bucket-${sls:stage}"
+  gipcerName: "gip-cer-bills-bucket-${sls:stage}"
 
 provider:
   name: aws
   region: eu-central-1
   profile: SAID
+  runtime: nodejs14.x
   environment:
     BUCKET_NAME: ${self:custom.gipcerName}
 
+functions:
+  gipCerBillsHandler:
+    handler: app.handler
+    reservedConcurrency: 3
+    memorySize: 1024
+    timeout: 30
+    events:
+      - s3:
+          bucket: ${self:custom.gipcerName}
+          event: s3:ObjectCreated:*
+          existing: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:GetObject
+          - s3:PutObject
+        Resource:
+          - "arn:aws:s3:::${self:custom.gipcerName}"
+          - "arn:aws:s3:::${self:custom.gipcerName}/*"
+    environment:
+      DB_URL: ${ssm:/gip-cer-db-url}
+      DB_PSW: ${ssm:/gip-cer-db-psw}
+
+
 resources:
   Resources:
-    gipcerBucket:
+    gipCerBillsBucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.gipcerName}
+
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-plugin-include-dependencies
