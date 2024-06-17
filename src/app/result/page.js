@@ -158,7 +158,7 @@ export default function ResulPage() {
                         variableType === "volume" &&
 
                         <div className="resultTable byVolume">
-                     
+
                             <table>
                                 <thead>
                                 <tr className={"community-header"}>
@@ -168,7 +168,8 @@ export default function ResulPage() {
                                             setCommunitySize(e.target.value)
                                         }}>
                                             {communitySizeOptions.map((option) =>
-                                                <MenuItem value={option.value}>{option.label}</MenuItem>)}
+                                                <MenuItem value={option.value}
+                                                          key={option.value}>{option.label}</MenuItem>)}
                                         </Select>
                                     </th>
                                     <th colSpan={2}>
@@ -261,7 +262,8 @@ export default function ResulPage() {
                                             setEfficiencyRate(e.target.value)
                                         }}>
                                             {efficiencyRateOptions.map((option) =>
-                                                <MenuItem value={option.value}>{option.label}</MenuItem>)}
+                                                <MenuItem value={option.value}
+                                                          key={option.value}>{option.label}</MenuItem>)}
                                         </Select>
                                     </th>
                                     <th colSpan={2}>
