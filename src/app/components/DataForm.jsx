@@ -7,22 +7,23 @@ import {
     LinearProgress,
     Select,
     Slider,
-    TextField,
-    Tooltip
+    TextField, Tooltip,
 } from "@mui/material";
-import LoaderDKW from "@/app/components/LoaderDKW";
-import {useEffect, useState} from "react";
-import {date, number, object, string} from "yup";
+import {useEffect, useRef, useState} from "react";
+import {number, object, string} from "yup";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CloudUpload from "@/app/components/icons/CloudUpload";
+import IconButton from "@mui/material/IconButton";
+import Info from "@/app/components/icons/Info";
 
 
 export default function DataForm({setStep}) {
     const [isLoading, setIsLoading] = useState(false)
+    const [files, setFiles] = useState([])
     const [secondStepValues, setSecondStepValues] = useState({
         user_type: "",
         community_type: "",
@@ -38,8 +39,7 @@ export default function DataForm({setStep}) {
         user_type: string().required("Scegli una tipologia di utente"),
         property_type: string().required("Scegli una tipologia di immobile"),
         avg_monthly_bill: string().required("Indica il consumo medio mensile in bolletta"),
-        community_types: string(),
-        // .required("Scegli il ruolo che intendi assumere nella comunità"),
+        community_type: string().required("Scegli il ruolo che intendi assumere nella comunità"),
         has_pv_type: string(),
         // .required("Campo obbligatorio"),
         year: number().nullable(),
@@ -151,9 +151,22 @@ export default function DataForm({setStep}) {
         },
     ];
 
-    function onSubmitForm(dataFromForm) {
+    async function onSubmitForm(dataFromForm) {
+        const body = {
+            "id": "a8cd4fe8-01b1-5c7a-a0a4-07657922da16",
+            ...dataFromForm,
+            "metadata": {"has_bills": files.length > 0, "bills_number": files.length}
+        }
+        console.log("DATA SUBMIT:", body)
+
+        const response = await fetch("/api/secondPage", {method: "POST", body: JSON.stringify(body)})
+        if (response.ok) {
+            const result = await response.json()
+            console.log(result)
+        } else {
+            console.log(response.text())
+        }
         setStep((prev) => prev + 1)
-        console.log(dataFromForm)
         setIsLoading(true)
         // setTimeout(() => {
         //     setIsLoading(false)
@@ -163,6 +176,20 @@ export default function DataForm({setStep}) {
 
     function valuetext(value) {
         return `${value} Kw/h`;
+    }
+
+    const handleFileUpload = (e) => {
+        if (!e.target.files.length > 0) {
+            return;
+        }
+        const files = Array.from(e.target.files)
+        setFiles(files.map((file) => URL.createObjectURL(file)))
+    }
+
+    const fileInputRef = useRef(null);
+
+    const handleButtonClick = () => {
+        fileInputRef.current.click()
     }
 
     const loaderTexts = ["verifica consumi annui in bolletta", "verifica immobile ed esposizione", "verifica impianto di produzione", "valutazione produzione annua", "valutazione autoconsumo", "valutazione energia condivisa", "valutazione incentivo Rid", "valutazione altri incentivi CER", "verifica ammortamento", "esito valutazione"]
@@ -187,7 +214,7 @@ export default function DataForm({setStep}) {
     return (
         <>
             {!isLoading ?
-                <form className={"flex-grow flex flex-col items-center justify-center"}
+                <form className={"flex-grow flex flex-col items-center justify-center my-8"}
                       onSubmit={handleFormSubmit(onSubmitForm)}>
                     <Grid container sx={{width: "70%", mx: "auto"}} spacing={1}>
                         <Grid item xs={12} md={6} sx={{py: 2}}>
@@ -261,11 +288,26 @@ export default function DataForm({setStep}) {
                                         flexDirection: "column",
                                         justifyContent: "space-between"
                                     }}>
-                                        <Typography gutterBottom sx={{mx: "auto", color: "rgb(0 0 0 / 60%)"}}>Consumo
+                                        <Typography gutterBottom sx={{
+                                            mx: "auto",
+                                            color: "rgb(0 0 0 / 60%)",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center"
+                                        }}>Consumo
                                             medio
                                             mensile
                                             in
-                                            bolletta</Typography>
+                                            bolletta
+                                            <Tooltip sx={{display: control._formValues.user_type !== "1" && "none"}}
+                                                     title={<h4 className={"text-lg"}>Una famiglia di x persone consuma
+                                                         in
+                                                         media y kw/mese</h4>}>
+                                                <IconButton>
+                                                    <Info/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Typography>
                                         {/*<InputLabel id="avg_monthly_bill">Consumo medio mensile in bolletta</InputLabel>*/}
                                         <Slider
                                             sx={{width: "90%", mx: "auto"}}
@@ -298,10 +340,23 @@ export default function DataForm({setStep}) {
                                 name="community_type"
                                 render={({field: {onChange, onBlur, value, ref}}) => (
                                     <FormControl fullWidth>
-                                        <InputLabel id="community_type">Ruolo comunità</InputLabel>
+                                        <InputLabel id="community_type" sx={{display: "flex", alignItems: "center"}}>Ruolo
+                                            comunità <Tooltip
+                                                title={<>
+                                                    <h4 className={"text-lg"}>Consumatore:preleva l’energia elettrica
+                                                        dalla rete per la quota di proprio uso finale</h4>
+                                                    <h4 className={"text-lg"}>Produttore: produce energia elettrica
+                                                        rinnovabile e la immette in rete per condividerla
+                                                    </h4></>}>
+                                                <IconButton>
+                                                    <Info/>
+                                                </IconButton>
+                                            </Tooltip></InputLabel>
                                         <Select
                                             labelId={"community_type"}
-                                            label={"Ruolo comunità"}
+                                            label={`Ruolo comunità ${
+                                                <Info/>
+                                            }`}
                                             fullWidth={true}
                                             onChange={onChange} // send value to hook form
                                             onBlur={onBlur} // notify when input is touched/blur
@@ -321,7 +376,8 @@ export default function DataForm({setStep}) {
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={6} sx={{py: 2}}>
+                        <Grid item xs={12} md={6}
+                              sx={{py: 2, display: control._formValues.community_type !== "2" && "none"}}>
                             <Controller
                                 control={control}
                                 name="has_pv_type"
@@ -349,7 +405,8 @@ export default function DataForm({setStep}) {
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} md={6} sx={{py: 2}}>
+                        <Grid item xs={12} md={6}
+                              sx={{py: 2, display: control._formValues.community_type !== "2" && "none"}}>
                             <Controller
                                 control={control}
                                 name="year"
@@ -372,8 +429,8 @@ export default function DataForm({setStep}) {
                             />
                         </Grid>
                         <div
-                            className={"bg-tertiary rounded w-full mt-12 mx-auto p-4 text-white flex justify-between items-center"}>
-                            <div>
+                            className={"bg-tertiary rounded w-full mt-12 mx-auto p-4 text-white flex justify-between items-center flex-wrap md:flex-nowrap"}>
+                            <div className={""}>
                                 <h4 className={"w-full text-xl mb-3"}>Carica la tua bolletta per avviare una simulazione
                                     più
                                     accurata</h4>
@@ -383,11 +440,17 @@ export default function DataForm({setStep}) {
                             <div>
                                 <Button variant={"contained"}
                                         color={"secondary"}
+                                        onClick={handleButtonClick}
                                         sx={{
                                             backgroundColor: "white",
                                             color: "var(--primary)",
                                             fontWeight: "bold"
-                                        }}>Carica <span className={"ms-2"}><CloudUpload/></span>
+                                        }}>
+                                    <input type={"file"} accept={"application/pdf, image/*"} ref={fileInputRef} hidden
+                                           multiple
+                                           onChange={handleFileUpload}/>Carica
+                                    <span className={"ms-2"}><CloudUpload/></span>
+
                                 </Button>
                             </div>
                         </div>
@@ -415,12 +478,12 @@ export default function DataForm({setStep}) {
                     <LinearProgress variant="determinate" color={"tertiary"} value={progress}
                                     sx={{
                                         height: "30px",
-                                        width: "80%",
+                                        width: "70%",
                                         borderRadius: "50px",
                                         backgroundColor: "#D9D9D9 !important",
                                         mt: 3
                                     }}/>
-                    <small className={"text-tertiary my-3 "}>{loaderTexts[progress.toString().charAt(0)]}</small>
+                    <small className={"text-tertiary my-3 text-lg"}>{loaderTexts[progress.toString().charAt(0)]}</small>
 
                 </div>
             }

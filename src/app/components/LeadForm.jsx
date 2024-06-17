@@ -1,5 +1,5 @@
 'use client'
-import {FormHelperText, Grid, Switch, TextField, Tooltip} from "@mui/material";
+import {FormHelperText, Grid, Modal, TextField, Tooltip} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Info from "@/app/components/icons/Info";
 import SwitchSelector from "react-switch-selector";
@@ -9,9 +9,13 @@ import {useState} from "react";
 import {boolean, object, string} from "yup";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
-export default function LeadForm({setStep}) {
+// todo add keys to selects items
+export default function LeadForm({setStep, setLeadId}) {
     const [isLoading, setIsLoading] = useState(false)
+    const [isError, setIsError] = useState(false)
     const [firstStepValues, setFirstStepValues] = useState({
         firstName: "",
         lastName: "",
@@ -21,7 +25,7 @@ export default function LeadForm({setStep}) {
         phoneNumber: "",
         auth: false
     })
-
+    const [open, setOpen] = useState(false)
     const formSchema = object({
         firstName: string().required("Insersci il tuo nome"),
         lastName: string().required("Insersci il tuo cognome"),
@@ -34,8 +38,9 @@ export default function LeadForm({setStep}) {
                 excludeEmptyString: true // permette stringhe vuote
             }),
         phoneNumber: string().required("Insersci il tuo numero di telefono").matches(
-            /^(?:(?:\+?39)?(?:\d{2,4})?\s*\d{6,10}|\+?39?\s*3\d{2}\s*\d{6,7})$/,
-            "Il numero inserito non è valido"),
+            /^(?:(?:\+|00)39)?\s*(?:0\d{2,4}\s*\d{6,8}|3\d{2}\s*\d{7})$/,
+            "Inserisci un numero di telefono valido"
+        ),
         auth: boolean().oneOf([true], "Per andare avanti è necessario accettare i termini di utilizzo")
     });
 
@@ -70,20 +75,47 @@ export default function LeadForm({setStep}) {
         formErrors.auth = null
     };
 
-    function onSubmitForm(dataFromForm) {
-        console.log(dataFromForm)
-        setIsLoading(true)
-        setTimeout(() => {
-            setIsLoading(false)
-            setStep((prev) => prev + 1)
-        }, 3000)
+    function handleClose() {
+        setOpen(false)
+    }
 
+    async function onSubmitForm(dataFromForm) {
+        const body = {
+            "num_tel": dataFromForm.phoneNumber,
+            "name": dataFromForm.firstName,
+            "surname": dataFromForm.lastName,
+            "email": dataFromForm.email,
+            "address": dataFromForm.address,
+            "city": dataFromForm.city,
+            "geo_data": {"": ""},
+            "terms": dataFromForm.auth,
+        }
+        try {
+            setIsLoading(true)
+            const response = await fetch("/api/firstPage", {method: "POST", body: JSON.stringify(body)})
+            if (response.ok) {
+                const result = await response.json()
+                console.log(result)
+                setLeadId(result.id)
+                setStep((prev) => prev + 1)
+
+            } else {
+                const error = await response.json()
+                // console.log("CATCH ", error)
+                throw new Error(error.message)
+            }
+        } catch (err) {
+            console.log("CATCH ERROR: ", err)
+            setIsError(true)
+            setOpen(true)
+        }
+        setIsLoading(false)
     }
 
     return (
         <>
             {!isLoading ?
-                <form className={"flex-grow flex flex-col items-center justify-center"}
+                <form className={"flex-grow flex flex-col items-center justify-center my-8"}
                       onSubmit={handleFormSubmit(onSubmitForm)}>
                     <Grid container sx={{width: "70%", mx: "auto"}} spacing={1}>
                         <Grid item xs={12} md={6} sx={{py: 2}}>
@@ -187,6 +219,7 @@ export default function LeadForm({setStep}) {
                                     <>  <TextField
                                         label={"Telefono"}
                                         fullWidth={true}
+                                        type={"number"}
                                         onChange={onChange} // send value to hook form
                                         onBlur={onBlur} // notify when input is touched/blur
                                         value={value}
@@ -233,7 +266,7 @@ export default function LeadForm({setStep}) {
                                                 <SwitchSelector
                                                     onChange={onChangeSwitch}
                                                     options={options}
-                                                    initialSelectedIndex={0}
+                                                    initialSelectedIndex={control._formValues.auth ? 1 : 0}
                                                     backgroundColor={"var(--primary)"}
                                                     fontColor={"#FFFFFF"}
                                                     error={Boolean(formErrors.auth)}
@@ -251,6 +284,30 @@ export default function LeadForm({setStep}) {
                         <div className={"w-full flex justify-end mt-8"}>
                             <Button variant={"contained"} color={"primary"} type={"submit"}>Successivo</Button>
                         </div>
+                        {isError && <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 400,
+                                backgroundColor: "#FFFFFF",
+                                boxShadow: 24,
+                                p: 4,
+                            }}>
+                                <Typography id="modal-modal-title" variant="h6" component="h2">
+                                    Errore durante l'invio dei dati
+                                </Typography>
+                                <Typography id="modal-modal-description" sx={{mt: 2}}>
+                                    Ti invitiamo a riprovare più tardi...
+                                </Typography>
+                            </Box>
+                        </Modal>}
                     </Grid>
                 </form> :
                 <div className={"flex flex-grow"}>
