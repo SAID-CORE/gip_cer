@@ -10,7 +10,7 @@ async function getter(request, {params}) {
 
     // query execution
     try {
-        const sql = "SELECT COUNT(*) FROM users WHERE city = $1"
+        const sql = "SELECT COUNT(*) FROM users WHERE LOWER(city) = LOWER($1)"
         let results = await client.query(sql, values)
         return new Response(JSON.stringify(results.rows));
     } catch (err) {

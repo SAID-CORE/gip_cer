@@ -49,4 +49,4 @@ async function checkUserExistence(id) {
     }
 }
 
-module.exports = {handler, test, updateUserBills, checkUserExistence};
+module.exports = {handler, updateUserBills, checkUserExistence};

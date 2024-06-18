@@ -1,6 +1,5 @@
 import {Client} from "pg";
 import {validateFirstFormData, genUuid5} from "./utils.js"
-import {sendStatusCode} from "next/dist/server/api-utils";
 
 async function poster(request) {
     // extract body from request

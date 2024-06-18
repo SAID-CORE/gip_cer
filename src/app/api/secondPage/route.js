@@ -1,5 +1,4 @@
 import {Client} from "pg";
-import {v4} from 'uuid';
 import {checkUserExistence, generatePresignedUrl, validateSecondFormData} from "./utils.js"
 
 async function poster(request) {

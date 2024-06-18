@@ -1,4 +1,4 @@
-import {parsePhoneNumber, isValidPhoneNumber} from "libphonenumber-js";
+import {parsePhoneNumber} from "libphonenumber-js";
 import {v5} from 'uuid';
 import {fileURLToPath} from "url";
 
