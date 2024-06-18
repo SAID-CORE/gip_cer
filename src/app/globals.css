@@ -363,7 +363,7 @@ header a {
 }
 
 .resultTable.byVolume {
-    
+
 
     .community-header th:not(:nth-child(1), :nth-child(3), :nth-child(5)) {
         color: white;
@@ -411,6 +411,49 @@ header a {
     }
 }
 
+.resultTable.mobile > div {
+    width: 100%;
+    /*margin: 0 auto;*/
+
+    .MuiSelect-select {
+        padding-top: 0.2em !important;
+        padding-bottom: 0.2em !important;
+    }
+}
+
+#mobileTable {
+    .community-header th:nth-child(2) {
+        background-color: var(--primary);
+        padding: 4%;
+    }
+
+    tr:nth-child(even) {
+        td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(5), td:nth-child(6), td:nth-child(8), td:nth-child(9) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    tr:nth-child(odd) {
+        td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(5), td:nth-child(6), td:nth-child(8), td:nth-child(9) {
+            background-color: rgb(243 244 246);
+        }
+    }
+
+    td.tableRed {
+        background-color: rgba(255, 0, 0, 20%) !important;
+    }
+
+    td.tableYellow {
+        background-color: rgba(250, 255, 0, 20%) !important;
+    }
+
+    td.tableGreen {
+        background-color: rgba(79, 158, 80, 20%) !important;
+    }
+}
+
 #disclaimer {
     background-color: rgba(79, 158, 80, 0.25)
 }
+
+

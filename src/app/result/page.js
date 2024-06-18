@@ -114,8 +114,8 @@ export default function ResulPage() {
     return (
         <ThemeProvider theme={theme}>
             <main className="flex min-h-screen flex-col bg-white ">
-                <div className={"bg-primary flex justify-between  items-center md:px-14 lg:px-28"} id={"breadcrumb"}>
-
+                <div className={"bg-primary flex justify-between items-center md:px-14 lg:px-28"}
+                     id={"breadcrumb"}>
                     <span className={"scale-50 md:scale-5 lg:scale-100"}><FirstIcon color={"var(--tertiary)"}/></span>
                     <hr className={"flex-grow"}
                         style={{borderColor: "var(--tertiary)"}}/>
@@ -125,77 +125,279 @@ export default function ResulPage() {
                     <span className={"scale-50 md:scale-75 lg:scale-100"}> <ThirdIcon
                         color={"var(--tertiary)"}/></span>
                 </div>
-                <div className={"px-28 mt-8"}>
-                    <Typography variant="h4" color={"primary"}
-                                sx={{fontWeight: "bold", textAlign: "center", my: 4}}>Valutazione economico-finanziaria
-                        per la
-                        nascita della tua
-                        Comunità di
-                        energia</Typography>
-                    <p>Ti presentiamo due diverse visualizzazioni dei piani economico-finanziari:</p>
-                    <ol className={""}>
-                        <li>
-                            1. La prima visualizzazione riguarda il volume della comunità, con variabili legate alla
-                            percentuale di consumo di energia
-                        </li>
-                        <li>
-                            2. La seconda visualizzazione riguarda il consumo di energia, con la variabile del volume
-                            della
-                            comunità.
-                        </li>
-                    </ol>
-                    <div className={"my-12 resultSwitchWrapper"}>
-                        <SwitchSelector
-                            onChange={onChangeSwitch}
-                            options={options}
-                            initialSelectedIndex={variableType}
-                            backgroundColor={"var(--primary)"}
-                            fontColor={"#FFFFFF"}
-                        />
-                    </div>
+                <div className={"px-4 md:px-10 lg:px-24 "}>
 
-                    {
-                        variableType === "volume" &&
+                    <div>
 
-                        <div className="resultTable byVolume">
 
-                            <table>
+                        <div className={"mt-8 px-4 lg:px-0"}>
+                            <Typography variant="h4" color={"primary"}
+                                        sx={{fontWeight: "bold", textAlign: "center", my: 4}}>Valutazione
+                                economico-finanziaria
+                                per la
+                                nascita della tua
+                                Comunità di
+                                energia</Typography>
+                            <p>Ti presentiamo due diverse visualizzazioni dei piani economico-finanziari:</p>
+                            <ol className={""}>
+                                <li>
+                                    1. La prima visualizzazione riguarda il volume della comunità, con variabili legate
+                                    alla
+                                    percentuale di consumo di energia
+                                </li>
+                                <li>
+                                    2. La seconda visualizzazione riguarda il consumo di energia, con la variabile del
+                                    volume
+                                    della
+                                    comunità.
+                                </li>
+                            </ol>
+                        </div>
+
+                        {/*todo remove this taiwlind breakpoint for styling purpose */}
+                        {/*<div className={"sm:hidden"}>min. SM</div>*/}
+                        {/*<div className={"md:hidden"}>min. MD</div>*/}
+                        {/*<div className={"lg:hidden"}>min. LG</div>*/}
+                        {/*<div className={"xl:hidden"}>min. XL</div>*/}
+
+
+                        <div className={" hidden lg:block md:scale-75 lg:scale-90 xl:scale-100"}>
+
+                            <div className={"my-12 resultSwitchWrapper"}>
+                                <SwitchSelector
+                                    onChange={onChangeSwitch}
+                                    options={options}
+                                    initialSelectedIndex={variableType}
+                                    backgroundColor={"var(--primary)"}
+                                    fontColor={"#FFFFFF"}
+                                />
+                            </div>
+                            {
+                                variableType === "volume" &&
+                                <div className="resultTable byVolume">
+
+                                    <table>
+                                        <thead>
+                                        <tr className={"community-header"}>
+                                            <th colSpan={2} className={"text-start"}>
+                                                <p>VARIABILE COMUNITÀ</p>
+                                                <Select value={communitySize} onChange={(e) => {
+                                                    setCommunitySize(e.target.value)
+                                                }}>
+                                                    {communitySizeOptions.map((option) =>
+                                                        <MenuItem value={option.value}
+                                                                  key={option.value}>{option.label}</MenuItem>)}
+                                                </Select>
+                                            </th>
+                                            <th colSpan={2}>
+                                                <div>EFFICIENZA <span className={"font-bold"}>20%</span>
+                                                </div>
+                                            </th>
+                                            <th></th>
+                                            <th colSpan={2}>
+                                                <div>EFFICIENZA <span className={"font-bold"}>50%</span>
+                                                </div>
+
+                                            </th>
+                                            <th></th>
+                                            <th colSpan={2}>
+                                                <div>EFFICIENZA <span className={"font-bold"}>100%</span>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th className={"bg-gray-100"}>CONSUMATORE</th>
+                                            <th className={"bg-gray-100"}>PRODUTTORE</th>
+                                            <th></th>
+                                            <th className={"bg-gray-100"}>CONSUMATORE</th>
+                                            <th className={"bg-gray-100"}>PRODUTTORE</th>
+                                            <th></th>
+                                            <th className={"bg-gray-100"}>CONSUMATORE</th>
+                                            <th className={"bg-gray-100"}>PRODUTTORE</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td colSpan={2}>INVESTIMENTO NECESSARIO</td>
+                                            <td>{data[`${communitySize}`][`20%`][0][0]}</td>
+                                            <td>{data[`${communitySize}`][`20%`][0][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`50%`][0][0]}</td>
+                                            <td>{data[`${communitySize}`][`50%`][0][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`100%`][0][0]}</td>
+                                            <td>{data[`${communitySize}`][`100%`][0][1]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>RATA DI ACCREDITO</td>
+                                            <td>{data[`${communitySize}`][`20%`][1][0]}</td>
+                                            <td>{data[`${communitySize}`][`20%`][1][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`50%`][1][0]}</td>
+                                            <td>{data[`${communitySize}`][`50%`][1][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`100%`][1][0]}</td>
+                                            <td>{data[`${communitySize}`][`100%`][1][1]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>ANNI RIENTRO</td>
+                                            <td>{data[`${communitySize}`][`20%`][2][0]}</td>
+                                            <td>{data[`${communitySize}`][`20%`][2][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`50%`][2][0]}</td>
+                                            <td>{data[`${communitySize}`][`50%`][2][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`100%`][2][0]}</td>
+                                            <td>{data[`${communitySize}`][`100%`][2][1]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>RITORNO IN VENT'ANNI</td>
+                                            <td>{data[`${communitySize}`][`20%`][3][0]}</td>
+                                            <td>{data[`${communitySize}`][`20%`][3][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`50%`][3][0]}</td>
+                                            <td>{data[`${communitySize}`][`50%`][3][1]}</td>
+                                            <td></td>
+                                            <td>{data[`${communitySize}`][`100%`][3][0]}</td>
+                                            <td>{data[`${communitySize}`][`100%`][3][1]}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            {
+                                variableType === "efficiency" &&
+                                <div className="resultTable">
+                                    <table>
+                                        <thead>
+                                        <tr className={"community-header"}>
+                                            <th colSpan={2} className={"text-start"}>
+                                                <p>VARIABILE EFFICIENZA</p>
+                                                <Select value={efficiencyRate} onChange={(e) => {
+                                                    setEfficiencyRate(e.target.value)
+                                                }}>
+                                                    {efficiencyRateOptions.map((option) =>
+                                                        <MenuItem value={option.value}
+                                                                  key={option.value}>{option.label}</MenuItem>)}
+                                                </Select>
+                                            </th>
+                                            <th colSpan={2}>
+                                                <div>COMUNITÀ DI ENERGIA DI <span
+                                                    className={"font-bold"}>N° 50 UTENTI</span>
+                                                </div>
+                                            </th>
+                                            <th></th>
+                                            <th colSpan={2}>
+                                                <div>COMUNITÀ DI ENERGIA DI <span
+                                                    className={"font-bold"}>N° 150 UTENTI</span>
+                                                </div>
+
+                                            </th>
+                                            <th></th>
+                                            <th colSpan={2}>
+                                                <div>COMUNITÀ DI ENERGIA DI <span
+                                                    className={"font-bold"}>N° 300 UTENTI</span>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th className={"bg-gray-100"}>CONSUMATORE</th>
+                                            <th className={"bg-gray-100"}>PRODUTTORE</th>
+                                            <th></th>
+                                            <th className={"bg-gray-100"}>CONSUMATORE</th>
+                                            <th className={"bg-gray-100"}>PRODUTTORE</th>
+                                            <th></th>
+                                            <th className={"bg-gray-100"}>CONSUMATORE</th>
+                                            <th className={"bg-gray-100"}>PRODUTTORE</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td colSpan={2}>INVESTIMENTO NECESSARIO</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][0][0]}</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][0][1]}</td>
+                                            <td></td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][0][0]}</td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][0][1]}</td>
+                                            <td></td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][0][0]}</td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][0][1]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>RATA DI ACCREDITO</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][1][0]}</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][1][1]}</td>
+                                            <td></td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][1][0]}</td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][1][1]}</td>
+                                            <td></td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][1][0]}</td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][1][1]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>ANNI RIENTRO</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][2][0]}</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][2][1]}</td>
+                                            <td></td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][2][0]}</td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][2][1]}</td>
+                                            <td></td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][2][0]}</td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][2][1]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>RITORNO IN VENT'ANNI</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][3][0]}</td>
+                                            <td>{data["50ppl"][`${efficiencyRate}`][3][1]}</td>
+                                            <td></td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][3][0]}</td>
+                                            <td>{data["150ppl"][`${efficiencyRate}`][3][1]}</td>
+                                            <td></td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][3][0]}</td>
+                                            <td>{data["300ppl"][`${efficiencyRate}`][3][1]}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+
+                        <div className="resultTable mobile lg:hidden scale-75 sm:scale-100 my-12">
+                            <div className={"my-8"}>
+                                <p>VARIABILE COMUNITÀ</p>
+                                <Select value={communitySize} fullWidth onChange={(e) => {
+                                    setCommunitySize(e.target.value)
+                                }}>
+                                    {communitySizeOptions.map((option) =>
+                                        <MenuItem value={option.value}
+                                                  key={option.value}>{option.label}</MenuItem>)}
+                                </Select>
+                                <p className={"mt-4"}>VARIABILE EFFICIENZA</p>
+                                <Select fullWidth value={efficiencyRate} onChange={(e) => {
+                                    setEfficiencyRate(e.target.value)
+                                }}>
+                                    {efficiencyRateOptions.map((option) =>
+                                        <MenuItem value={option.value}
+                                                  key={option.value}>{option.label}</MenuItem>)}
+                                </Select>
+                            </div>
+                            <table id={"mobileTable"}>
                                 <thead>
                                 <tr className={"community-header"}>
                                     <th colSpan={2} className={"text-start"}>
-                                        <p>VARIABILE EFFICIENZA</p>
-                                        <Select value={communitySize} onChange={(e) => {
-                                            setCommunitySize(e.target.value)
-                                        }}>
-                                            {communitySizeOptions.map((option) =>
-                                                <MenuItem value={option.value}
-                                                          key={option.value}>{option.label}</MenuItem>)}
-                                        </Select>
-                                    </th>
-                                    <th colSpan={2}>
-                                        <div>EFFICIENZA <span className={"font-bold"}>20%</span>
-                                        </div>
-                                    </th>
-                                    <th></th>
-                                    <th colSpan={2}>
-                                        <div>EFFICIENZA <span className={"font-bold"}>50%</span>
-                                        </div>
 
                                     </th>
-                                    <th></th>
                                     <th colSpan={2}>
-                                        <div>EFFICIENZA <span className={"font-bold"}>100%</span>
+                                        <div>EFFICIENZA <span className={"font-bold"}>{efficiencyRate}</span>
                                         </div>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th></th>
-                                    <th></th>
-                                    <th className={"bg-gray-100"}>CONSUMATORE</th>
-                                    <th className={"bg-gray-100"}>PRODUTTORE</th>
-                                    <th></th>
-                                    <th className={"bg-gray-100"}>CONSUMATORE</th>
-                                    <th className={"bg-gray-100"}>PRODUTTORE</th>
                                     <th></th>
                                     <th className={"bg-gray-100"}>CONSUMATORE</th>
                                     <th className={"bg-gray-100"}>PRODUTTORE</th>
@@ -204,163 +406,52 @@ export default function ResulPage() {
                                 <tbody>
                                 <tr>
                                     <td colSpan={2}>INVESTIMENTO NECESSARIO</td>
-                                    <td>{data[`${communitySize}`][`20%`][0][0]}</td>
-                                    <td>{data[`${communitySize}`][`20%`][0][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`50%`][0][0]}</td>
-                                    <td>{data[`${communitySize}`][`50%`][0][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`100%`][0][0]}</td>
-                                    <td>{data[`${communitySize}`][`100%`][0][1]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][0][0]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][0][1]}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={2}>RATA DI ACCREDITO</td>
-                                    <td>{data[`${communitySize}`][`20%`][1][0]}</td>
-                                    <td>{data[`${communitySize}`][`20%`][1][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`50%`][1][0]}</td>
-                                    <td>{data[`${communitySize}`][`50%`][1][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`100%`][1][0]}</td>
-                                    <td>{data[`${communitySize}`][`100%`][1][1]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][1][0]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][1][1]}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={2}>ANNI RIENTRO</td>
-                                    <td>{data[`${communitySize}`][`20%`][2][0]}</td>
-                                    <td>{data[`${communitySize}`][`20%`][2][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`50%`][2][0]}</td>
-                                    <td>{data[`${communitySize}`][`50%`][2][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`100%`][2][0]}</td>
-                                    <td>{data[`${communitySize}`][`100%`][2][1]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][2][0]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][2][1]}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={2}>RITORNO IN VENT'ANNI</td>
-                                    <td>{data[`${communitySize}`][`20%`][3][0]}</td>
-                                    <td>{data[`${communitySize}`][`20%`][3][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`50%`][3][0]}</td>
-                                    <td>{data[`${communitySize}`][`50%`][3][1]}</td>
-                                    <td></td>
-                                    <td>{data[`${communitySize}`][`100%`][3][0]}</td>
-                                    <td>{data[`${communitySize}`][`100%`][3][1]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][3][0]}</td>
+                                    <td className={efficiencyRate === "20%" ? "tableRed" : "" + efficiencyRate === "50%" ? "tableYellow" : "" + efficiencyRate === "100%" ? "tableGreen" : ""}>{data[`${communitySize}`][`${efficiencyRate}`][3][1]}</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
-                    }
-                    {
-                        variableType === "efficiency" &&
-                        <div className="resultTable">
-                            <table>
-                                <thead>
-                                <tr className={"community-header"}>
-                                    <th colSpan={2} className={"text-start"}>
-                                        <p>VARIABILE EFFICIENZA</p>
-                                        <Select value={efficiencyRate} onChange={(e) => {
-                                            setEfficiencyRate(e.target.value)
-                                        }}>
-                                            {efficiencyRateOptions.map((option) =>
-                                                <MenuItem value={option.value}
-                                                          key={option.value}>{option.label}</MenuItem>)}
-                                        </Select>
-                                    </th>
-                                    <th colSpan={2}>
-                                        <div>COMUNITÀ DI ENERGIA DI <span className={"font-bold"}>N° 50 UTENTI</span>
-                                        </div>
-                                    </th>
-                                    <th></th>
-                                    <th colSpan={2}>
-                                        <div>COMUNITÀ DI ENERGIA DI <span className={"font-bold"}>N° 150 UTENTI</span>
-                                        </div>
 
-                                    </th>
-                                    <th></th>
-                                    <th colSpan={2}>
-                                        <div>COMUNITÀ DI ENERGIA DI <span className={"font-bold"}>N° 300 UTENTI</span>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th className={"bg-gray-100"}>CONSUMATORE</th>
-                                    <th className={"bg-gray-100"}>PRODUTTORE</th>
-                                    <th></th>
-                                    <th className={"bg-gray-100"}>CONSUMATORE</th>
-                                    <th className={"bg-gray-100"}>PRODUTTORE</th>
-                                    <th></th>
-                                    <th className={"bg-gray-100"}>CONSUMATORE</th>
-                                    <th className={"bg-gray-100"}>PRODUTTORE</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td colSpan={2}>INVESTIMENTO NECESSARIO</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][0][0]}</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][0][1]}</td>
-                                    <td></td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][0][0]}</td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][0][1]}</td>
-                                    <td></td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][0][0]}</td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][0][1]}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}>RATA DI ACCREDITO</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][1][0]}</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][1][1]}</td>
-                                    <td></td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][1][0]}</td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][1][1]}</td>
-                                    <td></td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][1][0]}</td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][1][1]}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}>ANNI RIENTRO</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][2][0]}</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][2][1]}</td>
-                                    <td></td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][2][0]}</td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][2][1]}</td>
-                                    <td></td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][2][0]}</td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][2][1]}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}>RITORNO IN VENT'ANNI</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][3][0]}</td>
-                                    <td>{data["50ppl"][`${efficiencyRate}`][3][1]}</td>
-                                    <td></td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][3][0]}</td>
-                                    <td>{data["150ppl"][`${efficiencyRate}`][3][1]}</td>
-                                    <td></td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][3][0]}</td>
-                                    <td>{data["300ppl"][`${efficiencyRate}`][3][1]}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div id={"disclaimer"} className={"p-10 rounded my-12 text-primary"}>
+                            <div className={"flex items-center gap-2 text-sm font-semibold my-2"}>
+                                <Info/> LIMITAZIONI DI RESPONSABILITÀ
+                            </div>
+                            <small>
+                                Delta KiloWatt effettua simulazioni economico-finanziarie preliminari considerando
+                                l’eventuale contributo di sovvenzioni pubbliche, incentivi e detrazioni fiscali. Le
+                                stime
+                                non tengono conto di eventuali ulteriori vincoli fissati dalle norme che disciplinano il
+                                riconoscimento degli incentivi, delle sovvenzioni pubbliche e delle detrazioni fiscali,
+                                i
+                                quali saranno valutati, e saranno soggetti a controlli, da parte degli Enti preposti a
+                                norma
+                                di Legge esclusivamente nell'ambito dei procedimenti di ammissione e di controllo, da
+                                svolgersi in conformità alle discipline di riferimento. I risultati di Delta KiloWatt
+                                non
+                                potranno in alcun modo essere utilizzati al fine di vantare pretesa alcuna nei confronti
+                                di
+                                tali Enti anche riguardo gli esiti dei suddetti procedimenti, né essere intesi come
+                                verifica
+                                della sussistenza dei requisiti all'accesso a tali incentivi, sovvenzioni e detrazioni
+                                fiscali, e neanche configurare aspettativa alcuna in tal senso.
+                            </small>
                         </div>
-                    }
-                    <div id={"disclaimer"} className={"p-10 rounded my-12 text-primary"}>
-                        <div className={"flex items-center gap-2 text-sm font-semibold my-2"}>
-                            <Info/> LIMITAZIONI DI RESPONSABILITÀ
-                        </div>
-                        <small>
-                            Delta KiloWatt effettua simulazioni economico-finanziarie preliminari considerando
-                            l’eventuale contributo di sovvenzioni pubbliche, incentivi e detrazioni fiscali. Le stime
-                            non tengono conto di eventuali ulteriori vincoli fissati dalle norme che disciplinano il
-                            riconoscimento degli incentivi, delle sovvenzioni pubbliche e delle detrazioni fiscali, i
-                            quali saranno valutati, e saranno soggetti a controlli, da parte degli Enti preposti a norma
-                            di Legge esclusivamente nell'ambito dei procedimenti di ammissione e di controllo, da
-                            svolgersi in conformità alle discipline di riferimento. I risultati di Delta KiloWatt non
-                            potranno in alcun modo essere utilizzati al fine di vantare pretesa alcuna nei confronti di
-                            tali Enti anche riguardo gli esiti dei suddetti procedimenti, né essere intesi come verifica
-                            della sussistenza dei requisiti all'accesso a tali incentivi, sovvenzioni e detrazioni
-                            fiscali, e neanche configurare aspettativa alcuna in tal senso.
-                        </small>
                     </div>
                 </div>
 
