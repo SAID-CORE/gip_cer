@@ -19,9 +19,12 @@ import Button from "@mui/material/Button";
 import CloudUpload from "@/app/components/icons/CloudUpload";
 import IconButton from "@mui/material/IconButton";
 import Info from "@/app/components/icons/Info";
+import uploadS3 from "@/app/utils/uploadS3.js";
+import {useRouter} from 'next/navigation';
 
 
-export default function DataForm({setStep}) {
+export default function DataForm({setStep, leadId}) {
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [files, setFiles] = useState([])
     const [secondStepValues, setSecondStepValues] = useState({
@@ -152,27 +155,67 @@ export default function DataForm({setStep}) {
     ];
 
     async function onSubmitForm(dataFromForm) {
+        setIsLoading(true);
+        setProgress(0)
         const body = {
-            "id": "a8cd4fe8-01b1-5c7a-a0a4-07657922da16",
+            id: leadId || "a8cd4fe8-01b1-5c7a-a0a4-07657922da16",
             ...dataFromForm,
-            "metadata": {"has_bills": files.length > 0, "bills_number": files.length}
-        }
-        console.log("DATA SUBMIT:", body)
+            has_pv_type: dataFromForm.community_type === "1" ? null : dataFromForm.has_pv_type,
+            metadata: {has_bills: files.length > 0, bills_number: files.length}
+        };
+        setStep((prev) => prev + 1);
 
-        const response = await fetch("/api/secondPage", {method: "POST", body: JSON.stringify(body)})
-        if (response.ok) {
-            const result = await response.json()
-            console.log(result)
-        } else {
-            console.log(response.text())
-        }
-        setStep((prev) => prev + 1)
-        setIsLoading(true)
-        // setTimeout(() => {
-        //     setIsLoading(false)
-        // }, 3000)
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
 
+                xhr.open('POST', "/api/secondPage", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+
+                xhr.upload.onprogress = function (event) {
+                    if (event.lengthComputable) {
+                        const percentComplete = (event.loaded / event.total) * 100;
+                        setProgress(percentComplete); // Call the onProgress callback with the progress value
+                    }
+                };
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(JSON.parse(xhr.responseText));
+                    } else {
+                        reject(new Error(`Request failed with status: ${xhr.status} - ${xhr.statusText}`));
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject(new Error(`Network error occurred: ${xhr.statusText}`));
+                };
+
+                xhr.send(JSON.stringify(body));
+            });
+
+            const {urls} = response;
+            console.log(urls);
+
+            for (let i = 0; i < urls.length; i++) {
+                try {
+                    await uploadS3(urls[i], files[i], p => setProgress(p));
+                } catch (e) {
+                    console.log(e);
+                    alert('si è verificato un errore, riprova più tardi');
+                    setProgress(100); // Set progress to 100% in case of an error
+                    return; // Exit the loop and function on error
+                }
+            }
+
+            router.push("/result")
+        } catch (err) {
+            alert(err);
+        } finally {
+            // setIsLoading(false);
+        }
     }
+
 
     function valuetext(value) {
         return `${value} Kw/h`;
@@ -183,9 +226,11 @@ export default function DataForm({setStep}) {
             return;
         }
         const files = Array.from(e.target.files)
-        setFiles(files.map((file) => URL.createObjectURL(file)))
+        setFiles(files)
+        // setFiles(files.map((file) => URL.createObjectURL(file)))
     }
 
+    // REF for input type file handling
     const fileInputRef = useRef(null);
 
     const handleButtonClick = () => {
@@ -195,21 +240,22 @@ export default function DataForm({setStep}) {
     const loaderTexts = ["verifica consumi annui in bolletta", "verifica immobile ed esposizione", "verifica impianto di produzione", "valutazione produzione annua", "valutazione autoconsumo", "valutazione energia condivisa", "valutazione incentivo Rid", "valutazione altri incentivi CER", "verifica ammortamento", "esito valutazione"]
     const [progress, setProgress] = useState(0);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((oldProgress) => {
-                if (oldProgress === 100) {
-                    return 0;
-                }
-                const diff = Math.random() * 10;
-                return Math.min(oldProgress + diff, 100);
-            });
-        }, 500);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
+    // aggiornamento progressbar
+    // useEffect(() => {
+    //     const timer = setInterval(() => {
+    //         setProgress((oldProgress) => {
+    //             if (oldProgress === 100) {
+    //                 return 0;
+    //             }
+    //             const diff = Math.random() * 10;
+    //             return Math.min(oldProgress + diff, 100);
+    //         });
+    //     }, 500);
+    //
+    //     return () => {
+    //         clearInterval(timer);
+    //     };
+    // }, []);
 
     return (
         <>
