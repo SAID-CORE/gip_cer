@@ -2,7 +2,7 @@ POST http://localhost:3000/api/firstPage
 Accept: application/json
 
 {
-"num_tel": "3472656222",
+"num_tel": "",
 "name":"Giacomo",
 "surname":"Pistis",
 "email": "prova@gmail.com",

@@ -21,7 +21,7 @@ async function validateFirstFormData(data) {
         // phone number validation
         try {
             const phoneNumber = await parsePhoneNumber(data.num_tel, "IT")
-            console.log("PHONE: ", phoneNumber)
+            // console.log("PHONE: ", phoneNumber)
             if (!phoneNumber.isValid()) {
                 return {"success": false, "message": `invalid phone number ${phoneNumber.number}`}
             } else {

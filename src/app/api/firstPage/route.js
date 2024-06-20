@@ -8,7 +8,6 @@ async function poster(request) {
     // data validation
     let response = await validateFirstFormData(body);
 
-
     if (!response.success) {
         return new Response(JSON.stringify(response), {status: 400});
     } else {
