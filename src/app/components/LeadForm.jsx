@@ -12,7 +12,6 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-// todo add keys to selects items
 export default function LeadForm({setStep, setLeadId}) {
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
