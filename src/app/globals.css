@@ -457,3 +457,6 @@ header a {
 }
 
 
+body > div.pac-container.pac-logo::after {
+    display: none !important;
+}

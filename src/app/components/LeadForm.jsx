@@ -1,20 +1,53 @@
 'use client'
-import {FormHelperText, Grid, Modal, TextField, Tooltip} from "@mui/material";
+import React, {useState, useEffect, useRef} from 'react';
+import {Autocomplete, FormHelperText, Grid, Modal, TextField, Tooltip} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Info from "@/app/components/icons/Info";
 import SwitchSelector from "react-switch-selector";
 import Button from "@mui/material/Button";
 import LoaderDKW from "@/app/components/LoaderDKW";
-import {useState} from "react";
 import {boolean, object, string} from "yup";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import {useJsApiLoader, Autocomplete as GoogleAutocomplete} from '@react-google-maps/api';
+import MenuItem from "@mui/material/MenuItem";
 
+const libs = ["places"];
 export default function LeadForm({setStep, setLeadId}) {
-    const [isLoading, setIsLoading] = useState(false)
-    const [isError, setIsError] = useState(false)
+    const [geoData, setGeoData] = useState({})
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [autocomplete, setAutocomplete] = useState(null);
+    const autocompleteRef = useRef(null);
+    const {isLoaded} = useJsApiLoader({googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY, libraries: libs});
+    useEffect(() => {
+        if (isLoaded) {
+            const gAutocomplete = new google.maps.places.Autocomplete(autocompleteRef.current, {
+                types: ['address'],
+                componentRestrictions: {country: 'IT'}
+            });
+            setAutocomplete(gAutocomplete);
+            gAutocomplete.addListener('place_changed', () => {
+                const place = gAutocomplete.getPlace();
+                // console.log("PLACE FROM GOOGLE PLACES", place)
+                setGeoData(place)
+                const address = place.formatted_address;
+                let city = '';
+                for (const component of place.address_components) {
+                    if (component.types.includes('locality')) {
+                        city = component.long_name;
+                        break;
+                    }
+                }
+                setValue("address", address);
+                setValue("city", city);
+            });
+            autocompleteRef.current.setAttribute("placeholder", "Inserisci il tuo indirizzo");
+        }
+    }, [isLoaded]);
+
     const [firstStepValues, setFirstStepValues] = useState({
         firstName: "",
         lastName: "",
@@ -23,11 +56,13 @@ export default function LeadForm({setStep, setLeadId}) {
         email: "",
         phoneNumber: "",
         auth: false
-    })
-    const [open, setOpen] = useState(false)
+    });
+
+    const [open, setOpen] = useState(false);
+
     const formSchema = object({
-        firstName: string().required("Insersci il tuo nome"),
-        lastName: string().required("Insersci il tuo cognome"),
+        firstName: string().required("Inserisci il tuo nome"),
+        lastName: string().required("Inserisci il tuo cognome"),
         address: string(),
         city: string(),
         email: string().matches(
@@ -36,7 +71,7 @@ export default function LeadForm({setStep, setLeadId}) {
                 message: "Inserisci un'email valida",
                 excludeEmptyString: true // permette stringhe vuote
             }),
-        phoneNumber: string().required("Insersci il tuo numero di telefono").matches(
+        phoneNumber: string().required("Inserisci il tuo numero di telefono").matches(
             /^(?:(?:\+|00)39)?\s*(?:0\d{2,4}\s*\d{6,8}|3\d{2}\s*\d{7})$/,
             "Inserisci un numero di telefono valido"
         ),
@@ -54,7 +89,6 @@ export default function LeadForm({setStep, setLeadId}) {
         resolver: yupResolver(formSchema),
     });
 
-
     const options = [
         {
             label: "Rifiuta",
@@ -69,16 +103,15 @@ export default function LeadForm({setStep, setLeadId}) {
     ];
 
     const onChangeSwitch = (newValue) => {
-        // console.log(newValue);
         setValue("auth", newValue)
         formErrors.auth = null
     };
 
-    function handleClose() {
+    const handleClose = () => {
         setOpen(false)
-    }
+    };
 
-    async function onSubmitForm(dataFromForm) {
+    const onSubmitForm = async (dataFromForm) => {
         const body = {
             "num_tel": dataFromForm.phoneNumber,
             "name": dataFromForm.firstName,
@@ -86,30 +119,28 @@ export default function LeadForm({setStep, setLeadId}) {
             "email": dataFromForm.email,
             "address": dataFromForm.address,
             "city": dataFromForm.city,
-            "geo_data": {"": ""},
             "terms": dataFromForm.auth,
+            "geo_data": geoData,
         }
+        console.log("REQUEST BODY", body)
         try {
-            setIsLoading(true)
-            const response = await fetch("/api/firstPage", {method: "POST", body: JSON.stringify(body)})
+            setIsLoading(true);
+            const response = await fetch("/api/firstPage", {method: "POST", body: JSON.stringify(body)});
             if (response.ok) {
-                const result = await response.json()
-                console.log(result)
-                setLeadId(result.id)
-                setStep((prev) => prev + 1)
-
+                const result = await response.json();
+                setLeadId(result.id);
+                setStep(prev => prev + 1);
             } else {
-                const error = await response.json()
-                // console.log("CATCH ", error)
-                throw new Error(error.message)
+                const error = await response.json();
+                throw new Error(error.message);
             }
         } catch (err) {
-            console.log("CATCH ERROR: ", err)
-            setIsError(true)
-            setOpen(true)
+            setIsError(true);
+            setOpen(true);
         }
-        setIsLoading(false)
-    }
+        setIsLoading(false);
+    };
+
 
     return (
         <>
@@ -121,17 +152,17 @@ export default function LeadForm({setStep, setLeadId}) {
                             <Controller
                                 control={control}
                                 name="firstName"
-                                render={({field: {onChange, onBlur, value, ref}}) => (<>
+                                render={({field: {onChange, onBlur, value, ref}}) => (
+                                    <>
                                         <TextField
                                             label={"Nome"}
                                             fullWidth={true}
-                                            onChange={onChange} // send value to hook form
-                                            onBlur={onBlur} // notify when input is touched/blur
+                                            onChange={onChange}
+                                            onBlur={onBlur}
                                             value={value}
                                             error={Boolean(formErrors.firstName)}
                                         />
                                         <FormHelperText sx={{color: 'error.main'}}>
-                                            {/* MESSAGGIO DEFINITO IN USERSCHEMA */}
                                             {formErrors.firstName?.message}
                                         </FormHelperText>
                                     </>
@@ -140,7 +171,6 @@ export default function LeadForm({setStep, setLeadId}) {
                         </Grid>
 
                         <Grid item xs={12} md={6} sx={{py: 2}}>
-
                             <Controller
                                 control={control}
                                 name="lastName"
@@ -152,7 +182,8 @@ export default function LeadForm({setStep, setLeadId}) {
                                             onChange={onChange}
                                             onBlur={onBlur}
                                             value={value}
-                                            error={Boolean(formErrors.lastName)}/>
+                                            error={Boolean(formErrors.lastName)}
+                                        />
                                         <FormHelperText sx={{color: 'error.main'}}>
                                             {formErrors.lastName?.message}
                                         </FormHelperText>
@@ -166,13 +197,20 @@ export default function LeadForm({setStep, setLeadId}) {
                                 control={control}
                                 name="address"
                                 render={({field: {onChange, onBlur, value, ref}}) => (
-                                    <TextField
-                                        label={"Indirizzo"}
-                                        fullWidth={true}
-                                        onChange={onChange} // send value to hook form
-                                        onBlur={onBlur} // notify when input is touched/blur
-                                        value={value}
-                                        error={formErrors.address}/>
+                                    <>
+                                        <TextField
+                                            inputRef={autocompleteRef}
+                                            label={"Indirizzo"}
+                                            fullWidth={true}
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            value={value}
+                                            error={Boolean(formErrors.address)}
+                                        />
+                                        <FormHelperText sx={{color: 'error.main'}}>
+                                            {formErrors.address?.message}
+                                        </FormHelperText>
+                                    </>
                                 )}
                             />
                         </Grid>
@@ -185,10 +223,11 @@ export default function LeadForm({setStep, setLeadId}) {
                                     <TextField
                                         label={"Città"}
                                         fullWidth={true}
-                                        onChange={onChange} // send value to hook form
-                                        onBlur={onBlur} // notify when input is touched/blur
+                                        onChange={onChange}
+                                        onBlur={onBlur}
                                         value={value}
-                                        error={formErrors.city}/>
+                                        error={Boolean(formErrors.city)}
+                                    />
                                 )}
                             />
                         </Grid>
@@ -201,28 +240,30 @@ export default function LeadForm({setStep, setLeadId}) {
                                     <TextField
                                         label={"Email"}
                                         fullWidth={true}
-                                        onChange={onChange} // send value to hook form
-                                        onBlur={onBlur} // notify when input is touched/blur
+                                        onChange={onChange}
+                                        onBlur={onBlur}
                                         value={value}
-                                        error={Boolean(formErrors.email)}
                                         helperText={formErrors.email?.message}
                                     />
                                 )}
                             />
                         </Grid>
+
                         <Grid item xs={12} md={6} sx={{py: 2}}>
                             <Controller
                                 control={control}
                                 name="phoneNumber"
                                 render={({field: {onChange, onBlur, value, ref}}) => (
-                                    <>  <TextField
-                                        label={"Telefono"}
-                                        fullWidth={true}
-                                        type={"number"}
-                                        onChange={onChange} // send value to hook form
-                                        onBlur={onBlur} // notify when input is touched/blur
-                                        value={value}
-                                        error={Boolean(formErrors.phoneNumber)}/>
+                                    <>
+                                        <TextField
+                                            label={"Telefono"}
+                                            fullWidth
+                                            type={"number"}
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            value={value}
+                                            error={Boolean(formErrors.phoneNumber)}
+                                        />
                                         <FormHelperText sx={{color: 'error.main'}}>
                                             {formErrors.phoneNumber?.message}
                                         </FormHelperText>
@@ -230,6 +271,7 @@ export default function LeadForm({setStep, setLeadId}) {
                                 )}
                             />
                         </Grid>
+
                         <div className={"bg-gray-200 rounded w-full mt-12 mx-auto p-12"}>
                             <h4 className={"w-full text-xl mb-3"}>Autorizzazioni</h4>
                             <div className={"flex justify-between flex-wrap"}>
@@ -260,7 +302,6 @@ export default function LeadForm({setStep, setLeadId}) {
                                         control={control}
                                         name="auth"
                                         render={({field: {onChange, onBlur, value, ref}}) =>
-
                                             <>
                                                 <SwitchSelector
                                                     onChange={onChangeSwitch}
@@ -270,8 +311,7 @@ export default function LeadForm({setStep, setLeadId}) {
                                                     fontColor={"#FFFFFF"}
                                                     error={Boolean(formErrors.auth)}
                                                 />
-                                                <FormHelperText
-                                                    sx={{color: 'error.main'}}>
+                                                <FormHelperText sx={{color: 'error.main'}}>
                                                     {formErrors.auth?.message}
                                                 </FormHelperText>
                                             </>}

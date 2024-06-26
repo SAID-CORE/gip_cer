@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^3.6.0",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
+    "@react-google-maps/api": "^2.19.3",
     "libphonenumber-js": "^1.11.3",
     "mui": "^0.0.1",
     "next": "14.2.3",
@@ -29,9 +30,9 @@
     "react-native-switch-selector-fix": "^2.0.4",
     "react-responsive-carousel": "^3.2.23",
     "react-switch-selector": "^2.2.1",
-    "yup": "^1.4.0",
     "serverless-plugin-include-dependencies": "^6.1.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "eslint": "^8",
