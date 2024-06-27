@@ -174,7 +174,7 @@ export default function ResulPage() {
                             </div>
                             {
                                 variableType === "volume" &&
-                                <div className="resultTable byVolume">
+                                <div className="resultTable desktop byVolume">
 
                                     <table>
                                         <thead>
@@ -367,7 +367,7 @@ export default function ResulPage() {
                         </div>
 
                         <div className="resultTable mobile lg:hidden scale-75 sm:scale-100 my-12">
-                            <div className={"my-8"}>
+                            <div className={"mb-8"}>
                                 <p>VARIABILE COMUNITÀ</p>
                                 <Select value={communitySize} fullWidth onChange={(e) => {
                                     setCommunitySize(e.target.value)
@@ -392,7 +392,8 @@ export default function ResulPage() {
 
                                     </th>
                                     <th colSpan={2}>
-                                        <div>EFFICIENZA <span className={"font-bold"}>{efficiencyRate}</span>
+                                        <div>EFFICIENZA <span
+                                            className={"font-bold"}>{efficiencyRate}</span>
                                         </div>
                                     </th>
                                 </tr>

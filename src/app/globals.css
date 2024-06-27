@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 :root {
+    font-size: 16px;
+    line-height: 32px;
+    letter-spacing: 0.57px;
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
@@ -63,6 +66,10 @@ body {
 
 #simulator {
     margin-top: -3em;
+}
+
+#heroSection img {
+    min-width: 185px;
 }
 
 #simulator img {
@@ -271,9 +278,10 @@ header a {
 .resultSwitchWrapper {
     label {
         font-weight: bold;
+        font-size: 110%;
     }
 
-    height: 37px;
+    height: 47px;
 }
 
 /* TABELLA RISULTATI */
@@ -287,6 +295,9 @@ header a {
         margin-top: 10px;
     }
 
+    table span {
+        display: block;
+    }
 
     th, td {
         border: 0 !important;
@@ -333,6 +344,7 @@ header a {
         border-radius: 200px 200px 0px 0px;
         /*border-radius: 280% 280% 0px 0px;*/
         background-color: var(--tertiary);
+        line-height: 120%;
     }
 
     /* var(--tertiary) but opacized  ****** REPLACED HERE BELOW ****** */
@@ -359,6 +371,12 @@ header a {
         td:nth-child(2), td:nth-child(3), td:nth-child(5), td:nth-child(6), td:nth-child(8), td:nth-child(9) {
             border: 1px solid black !important;
         }
+    }
+}
+
+.resultTable:not(.mobile) .community-header th:not(:nth-child(1), :nth-child(3), :nth-child(5)) {
+    div {
+        margin-bottom: 10px;
     }
 }
 

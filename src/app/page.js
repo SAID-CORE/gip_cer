@@ -33,7 +33,7 @@ export default function Home() {
     return (
         <ThemeProvider theme={theme}>
             <main className="flex min-h-screen flex-col bg-white">
-                <div className={"bg-primary py-32 text-center flex flex-col items-center gap-2"}
+                <div className={"bg-primary py-32 text-center flex flex-col items-center gap-2"} id={"heroSection"}
                      style={{"clipPath": "polygon(0% 0%, 0 78%, 100% 100%, 100% 0%)"}}>
                     <img src={"/assets/Delta_KiloWatt_logo.png"} alt={"Delta Kilowatt"} className={"w-1/6"}/>
                     <p className={"title text-white text-2xl px-12 mb-6"}>
@@ -42,7 +42,7 @@ export default function Home() {
                     </p>
                     <Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>
                 </div>
-                <div className={"md:flex"} id={"simulator"}>
+                <div className={"xl:flex"} id={"simulator"}>
                     <div className={"p-12 flex flex-col justify-start gap-8"}>
                         <h5 className={"text-primary text-3xl font-semibold"}>IL SIMULATORE DELTA KILOWATT</h5>
                         <p>
@@ -126,7 +126,7 @@ export default function Home() {
                                     <tfoot>
                                     <tr>
                                         <th colSpan={2}
-                                            className={"bg-secondary text-primary text-sm font-light cursor-pointer"}
+                                            className={"bg-secondary text-primary font-bold  cursor-pointer"}
                                             onClick={handleClick}>Avvia la simulazione, unisciti alla CER del tuo comune
                                         </th>
                                     </tr>
@@ -159,7 +159,7 @@ export default function Home() {
                                     <tfoot>
                                     <tr>
                                         <th colSpan={2}
-                                            className={"bg-secondary text-primary text-sm font-light cursor-pointer"}
+                                            className={"bg-secondary text-primary text-wrap font-bold cursor-pointer"}
                                             onClick={handleClick}>Avvia la simulazione, unisciti alla CER del tuo comune
                                         </th>
                                     </tr>
