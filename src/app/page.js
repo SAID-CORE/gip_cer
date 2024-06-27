@@ -5,20 +5,14 @@ import Button from "@mui/material/Button";
 import {theme} from "@/MuiTheme";
 import {Autocomplete, TextField, ThemeProvider} from "@mui/material";
 import ProcessTimeline from "@/app/components/ProcessTimeline";
-import {comuniCagliari} from "@/app/utils/MunicipalityList";
+import {MunicipalityList} from "@/app/utils/MunicipalitiesData.js"
 import {redirect} from "next/navigation";
 import {useRouter} from "next/navigation";
+import getUserInMunicipality from "@/app/utils/getUsersInMunicipality.js";
 
 
 export default function Home() {
     const router = useRouter()
-    const municipalities = comuniCagliari.map((m) => {
-        return ({
-            label: m,
-            value: m
-        })
-    })
-
     const [selectedMunicipality, setSelectedMunicipality] = useState(null)
     const [isLoadingData, setIsLoadingData] = useState(false)
 
@@ -85,13 +79,13 @@ export default function Home() {
                         SVILUPPO DELLE
                         COMUNITÀ DI ENERGIA IN SARDEGNA</h5>
                     <div className={"my-12"}>
-                        <Autocomplete options={municipalities}
-                                      getOptionLabel={(option) => option.label}
+                        <Autocomplete options={MunicipalityList}
+                                      getOptionLabel={(option) => option.name}
                                       sx={{width: 300}}
                                       noOptionsText={'Nessun risultato'}
                                       value={selectedMunicipality}
                                       onChange={(event, newValue) => handleLoadMunicipalityData(newValue)}
-                                      isOptionEqualToValue={(option, value) => option.value === value.value}
+                            // isOptionEqualToValue={(option, value) => option.value === value.value}
                                       renderInput={(params) => {
                                           return <TextField {...params} label="Seleziona il tuo comune"/>
                                       }
@@ -111,7 +105,7 @@ export default function Home() {
                                     <thead>
                                     <tr>
                                         <th colSpan={2}
-                                            className={"bg-primary text-white"}>{selectedMunicipality.value} (Prov)
+                                            className={"bg-primary text-white"}>{selectedMunicipality.name} ({selectedMunicipality.prov})
                                         </th>
                                     </tr>
                                     </thead>
@@ -144,22 +138,22 @@ export default function Home() {
                                     <thead>
                                     <tr>
                                         <th colSpan={2}
-                                            className={"bg-primary text-white"}>{selectedMunicipality.value} (Prov)
+                                            className={"bg-primary text-white"}>{selectedMunicipality.name} ({selectedMunicipality.prov})
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
                                         <td>N° totale aderenti</td>
-                                        <td>151</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop).pop}</td>
                                     </tr>
                                     <tr>
                                         <td>N° totale Consumatori</td>
-                                        <td>82</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop).cons}</td>
                                     </tr>
                                     <tr>
                                         <td>N° totale Produttori</td>
-                                        <td>58</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop).prod}</td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
