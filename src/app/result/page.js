@@ -1,7 +1,7 @@
 "use client"
 import Typography from "@mui/material/Typography";
 import {theme} from "@/MuiTheme";
-import {Select, ThemeProvider} from "@mui/material";
+import {Select, TextField, ThemeProvider} from "@mui/material";
 import {useState} from "react";
 import SwitchSelector from "react-switch-selector";
 import FirstIcon from "@/app/components/icons/FirstIcon";
@@ -9,11 +9,13 @@ import SecondIcon from "@/app/components/icons/SecondIcon";
 import ThirdIcon from "@/app/components/icons/ThirdIcon";
 import Info from "@/app/components/icons/Info";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 
 export default function ResulPage() {
     const [variableType, setVariableType] = useState("efficiency")
     const [efficiencyRate, setEfficiencyRate] = useState("20%")
     const [communitySize, setCommunitySize] = useState("50ppl")
+    const [email, setEmails] = useState("")
     const [data, setData] = useState(
         {
             "50ppl": {
@@ -111,6 +113,18 @@ export default function ResulPage() {
         // console.log(newValue);
         setVariableType(newValue)
     };
+
+    function handleSubmitShare(e) {
+        e.preventDefault()
+        const emails = email.split(";" || ",");
+        console.log("EMAIL INSERITE:", emails)
+        //     todo handle email validation (?) & email send
+    }
+
+    function handleContactMe() {
+        alert("SONO VERAMENTE EUFORICO")
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <main className="flex min-h-screen flex-col bg-white ">
@@ -457,6 +471,41 @@ export default function ResulPage() {
                 </div>
 
             </main>
+            <div className={"bg-primary text-white xl:flex"} id={"footerHero"}>
+                <div className={"p-24"}>
+                    <Typography variant="h4" color={"white"}
+                                sx={{fontWeight: "bold", my: 4, textTransform: "uppercase"}}>Entra a far parte ora della
+                        comunità di energia rinnovabile del tuo comune</Typography>
+                    <Button variant={"contained"} color={"secondary"}
+                            sx={{width: {xs: "inherit", xl: "100%"}, fontSize: "100%", mb: 4}}
+                            onClick={handleContactMe}>
+                        Voglio
+                        essere
+                        contattato</Button>
+                    <p className={"text-lg"}>Condividi il simulatore per aumentare i benefici della futura comunità di
+                        energia rinnovabile</p>
+                    <div className={" pt-9"}>
+                        <form onSubmit={handleSubmitShare} className={"flex justify-start items-center"}>
+                            <TextField
+                                sx={{
+                                    input: {color: "var(--primary)", backgroundColor: "#ffffffba !important"},
+                                    flexGrow: 2
+                                }}
+                                placeholder={"E-mail"}
+                                value={email}
+                                onChange={(e) => setEmails(e.target.value)}
+                                focused
+                            /> <Button variant={"contained"} color={"tertiary"}
+                                       sx={{height: "110% !important", py: 1.6, fontSize: "1rem"}}
+                                       type={"submit"}>Condividi</Button>
+                        </form>
+                    </div>
+                    <small>inserisci anche più mail separate dal punto e virgola</small>
+
+                </div>
+                <img className={"w-full xl:w-1/2"} alt="Comunità di persone in stile cartoon"
+                     src={"/assets/Community_cartoon.png"}/>
+            </div>
         </ThemeProvider>
     )
 }

@@ -1,15 +1,15 @@
-export default function getUserInMunicipality(input) {
-    let pop;
+export default function getUserInMunicipality(input, count) {
+    let pop = count;
     if (input < 5000) {
-        pop = Math.round(input * 0.01);
+        pop += Math.round(input * 0.01);
     } else if (input >= 5000 && input < 7500) {
-        pop = Math.round(input * 0.005);
+        pop += Math.round(input * 0.005);
     } else if (input >= 7500 && input < 10000) {
-        pop = Math.round(input * 0.0025);
+        pop += Math.round(input * 0.0025);
     } else if (input >= 10000 && input < 30000) {
-        pop = Math.round(input * 0.002);
+        pop += Math.round(input * 0.002);
     } else {
-        pop = Math.round(input * 0.0016);
+        pop += Math.round(input * 0.0016);
     }
 
     return {

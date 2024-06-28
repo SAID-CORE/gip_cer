@@ -6,22 +6,38 @@ import {theme} from "@/MuiTheme";
 import {Autocomplete, TextField, ThemeProvider} from "@mui/material";
 import ProcessTimeline from "@/app/components/ProcessTimeline";
 import {MunicipalityList} from "@/app/utils/MunicipalitiesData.js"
-import {redirect} from "next/navigation";
 import {useRouter} from "next/navigation";
 import getUserInMunicipality from "@/app/utils/getUsersInMunicipality.js";
+import {NextResponse} from "next/server.js";
 
 
 export default function Home() {
     const router = useRouter()
     const [selectedMunicipality, setSelectedMunicipality] = useState(null)
     const [isLoadingData, setIsLoadingData] = useState(false)
+    const [count, setCount] = useState(null)
 
-    const handleLoadMunicipalityData = (newValue) => {
-        setSelectedMunicipality(newValue)
-        setIsLoadingData(true)
-        setTimeout(() => {
-            setIsLoadingData(false)
-        }, 5000)
+    const handleLoadMunicipalityData = async (newValue) => {
+        if (newValue) {
+            setSelectedMunicipality(newValue)
+            setIsLoadingData(true)
+            try {
+                const response = await fetch(`http://localhost:3000/api/userCount/${newValue.name}`)
+                if (!response.ok) {
+                    alert("errore")
+                    throw new Error(`Errore durante il recupero dei dati dal comune di ${newValue.name} (${newValue.prov})`)
+                } else {
+                    const data = await response.json()
+                    //console.log(`Form compilati a ${newValue.name}: ${data[0].count}`)
+                    setCount(parseInt(data[0].count))
+                }
+            } catch (error) {
+                console.log(error)
+                alert("Errore:", error.message)
+            } finally {
+                setIsLoadingData(false)
+            }
+        }
     }
 
     function handleClick() {
@@ -43,7 +59,7 @@ export default function Home() {
                     <Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>
                 </div>
                 <div className={"xl:flex"} id={"simulator"}>
-                    <div className={"p-12 flex flex-col justify-start gap-8"}>
+                    <div className={"p-12  xl:px-32 xl:mx-5 flex flex-col justify-start gap-8"}>
                         <h5 className={"text-primary text-3xl font-semibold"}>IL SIMULATORE DELTA KILOWATT</h5>
                         <p>
                             Il Simulatore per la valutazione economica delle Comunità di Energia Rinnovabile
@@ -112,15 +128,15 @@ export default function Home() {
                                     <tbody>
                                     <tr>
                                         <td>N° totale aderenti</td>
-                                        <td>151</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop, count).pop}</td>
                                     </tr>
                                     <tr>
                                         <td>N° totale Consumatori</td>
-                                        <td>82</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop, count).cons}</td>
                                     </tr>
                                     <tr>
                                         <td>N° totale Produttori</td>
-                                        <td>58</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop, count).prod}</td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
@@ -145,15 +161,15 @@ export default function Home() {
                                     <tbody>
                                     <tr>
                                         <td>N° totale aderenti</td>
-                                        <td>{getUserInMunicipality(selectedMunicipality.pop).pop}</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop, count).pop}</td>
                                     </tr>
                                     <tr>
                                         <td>N° totale Consumatori</td>
-                                        <td>{getUserInMunicipality(selectedMunicipality.pop).cons}</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop, count).cons}</td>
                                     </tr>
                                     <tr>
                                         <td>N° totale Produttori</td>
-                                        <td>{getUserInMunicipality(selectedMunicipality.pop).prod}</td>
+                                        <td>{getUserInMunicipality(selectedMunicipality.pop, count).prod}</td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
