@@ -276,6 +276,10 @@ header a {
 
 /* ************************************************************************************************** */
 
+body > main > div.px-4.md\:px-10.lg\:px-24 > div > div.hidden.lg\:block.md\:scale-75.lg\:scale-90.xl\:scale-100 > div.resultTable > table > thead > tr.community-header > th.text-start > div > div > span {
+    display: inline-flex;
+}
+
 .resultSwitchWrapper {
     label {
         font-weight: bold;

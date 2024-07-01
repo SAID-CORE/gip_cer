@@ -87,7 +87,7 @@ export default function Home() {
                     <p className={"text-center"}>A seconda del volume di persone che aderiranno alla Comunità di Energia
                         Rinnovabile</p>
                     <ProcessTimeline></ProcessTimeline>
-                    {/*<Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>*/}
+                    <Button variant={"contained"} color={"secondary"} onClick={handleClick}> Avvia ora</Button>
 
                 </div>
                 <div className={"p-12 flex flex-col items-center"}>

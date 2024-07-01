@@ -85,15 +85,15 @@ export default function ResulPage() {
     ];
 
     const efficiencyRateOptions = [{
-        label: "Consumo del 20% di energia",
+        label: "20% di energia",
         value: "20%",
     },
         {
-            label: "Consumo del 50% di energia",
+            label: "50% di energia",
             value: "50%",
         },
         {
-            label: "Consumo del 100% di energia",
+            label: "100% di energia",
             value: "100%",
         },]
     const communitySizeOptions = [{
@@ -294,7 +294,17 @@ export default function ResulPage() {
                                                 }}>
                                                     {efficiencyRateOptions.map((option) =>
                                                         <MenuItem value={option.value}
-                                                                  key={option.value}>{option.label}</MenuItem>)}
+                                                                  key={option.value}>
+                                                            <span
+                                                                className={"inline-flex items-center gap-2 flex-nowrap"}>
+                                                         <svg height="20" width="20">
+                                                              <circle cx="10" cy="10" r="10"
+                                                                      fill={option.value === "20%" ? "red" : option.value === "50%" ? "var(--secondary)" : "var(--tertiary)"}
+                                                                      stroke="black" strokeWidth="0.5"/>
+                                                            </svg>
+                                                                {option.label}
+                                                                          </span>
+                                                        </MenuItem>)}
                                                 </Select>
                                             </th>
                                             <th colSpan={2}>
@@ -396,7 +406,15 @@ export default function ResulPage() {
                                 }}>
                                     {efficiencyRateOptions.map((option) =>
                                         <MenuItem value={option.value}
-                                                  key={option.value}>{option.label}</MenuItem>)}
+                                                  key={option.value}> <span
+                                            className={"inline-flex items-center gap-2 flex-nowrap"}>
+                                                         <svg height="20" width="20">
+                                                              <circle cx="10" cy="10" r="10"
+                                                                      fill={option.value === "20%" ? "red" : option.value === "50%" ? "var(--secondary)" : "var(--tertiary)"}
+                                                                      stroke="black" strokeWidth="0.5"/>
+                                                            </svg>
+                                            {option.label}
+                                                                          </span></MenuItem>)}
                                 </Select>
                             </div>
                             <table id={"mobileTable"}>

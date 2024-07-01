@@ -8,9 +8,13 @@ export default function CarouselComponent({items}) {
                   showIndicators={false} showThumbs={false}
                   id={"carousel"}>
             {items.map((item, i) =>
-                <div key={i}
-                     className={"w-3/4 mx-auto border z-20 border-white rounded-md p-4 flex justify-center items-center text-center"}>
-                    {item.cardDetailedText}
+                <div key={i} className={"flex flex-col justify-center items-center"}>
+
+                    <div className={"bg-white text-tertiary aspect-square mb-5 rounded-full text-2xl"}>{i + 1}</div>
+                    <div
+                        className={"w-3/4 mx-auto border z-20 border-white rounded-md p-4 flex justify-center items-center text-center"}>
+                        {item.cardDetailedText}
+                    </div>
                 </div>)
             }
         </Carousel>

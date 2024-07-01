@@ -3,7 +3,7 @@ export default function Footer() {
         <footer className={"bg-primary "}>
             <div
                 className={"flex flex-col md:flex-row justify-between items-start md:items-center gap-3 w-10/12 mx-auto"}>
-                <img src={"/assets/Delta_KiloWatt_logo.png"} alt={"Delta Kilowatt"}/>
+                <img src={"/assets/Delta_KiloWatt_logo.png"} alt={"Delta Kilowatt"} className={"mt-2 md:mt-0"}/>
                 <img src={"/assets/numero-verde1.webp"} alt={"Numero verde: 800 68 48 85"} className={"mt-8"}/>
                 <div className={"mt-6 mb-5 w-full  md:w-1/3"}>
                     <h6 className={"my-3 font-semibold text-sm text-gray-400"}>SEGUICI SU FACEBOOK</h6>
